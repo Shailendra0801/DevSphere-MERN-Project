@@ -1,37 +1,77 @@
-const express = require('express');
-const cors = require('cors');
-const mongoose = require('mongoose');
-const apiRoutes = require('./routes/api');
-require('dotenv').config();
+/**
+ * Server Entry Point
+ * Main server file that starts the Express application
+ */
 
-const app = express();
+require('dotenv').config();  // Load environment variables
+const app = require('./app');         // Import configured Express app
+const connectDB = require('./config/db'); // Import database connection
+
+// Get port from environment variables or default to 5000
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
-app.use(express.json());
+/**
+ * Start the server
+ */
+const startServer = async () => {
+  try {
+    // Connect to MongoDB
+    await connectDB();
+    
+    // Start Express server
+    const server = app.listen(PORT, () => {
+      console.log('=====================================');
+      console.log(`🚀 Server Running Successfully!`);
+      console.log(`📡 Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`📍 Port: ${PORT}`);
+      console.log(`🌐 Local: http://localhost:${PORT}`);
+      console.log(`🏥 Health Check: http://localhost:${PORT}/api/health`);
+      console.log('=====================================');
+    });
 
-// MongoDB Connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/devsphere';
+    // Handle server errors
+    server.on('error', (error) => {
+      if (error.syscall !== 'listen') {
+        throw error;
+      }
 
-mongoose.connect(MONGODB_URI)
-  .then(() => console.log('MongoDB connected successfully'))
-  .catch((err) => console.log('MongoDB connection error:', err));
+      const bind = typeof PORT === 'string' ? 'Pipe ' + PORT : 'Port ' + PORT;
 
-// Routes
-app.use('/api', apiRoutes);
+      // Handle specific listen errors with friendly messages
+      switch (error.code) {
+        case 'EACCES':
+          console.error(bind + ' requires elevated privileges');
+          process.exit(1);
+          break;
+        case 'EADDRINUSE':
+          console.error(bind + ' is already in use');
+          process.exit(1);
+          break;
+        default:
+          throw error;
+      }
+    });
 
-// Basic route
-app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to DevSphere MERN Project API' });
-});
+    // Graceful shutdown
+    process.on('SIGTERM', () => {
+      console.log('SIGTERM received. Shutting down gracefully...');
+      server.close(() => {
+        console.log('Process terminated');
+      });
+    });
 
-// Health check route
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Server is running' });
-});
+    process.on('SIGINT', () => {
+      console.log('SIGINT received. Shutting down gracefully...');
+      server.close(() => {
+        console.log('Process terminated');
+      });
+    });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+  } catch (error) {
+    console.error('Failed to start server:', error.message);
+    process.exit(1);
+  }
+};
+
+// Start the server
+startServer();

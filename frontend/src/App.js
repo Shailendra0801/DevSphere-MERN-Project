@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import UserList from './components/UserList';
+import { AuthProvider } from './contexts/AuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
+import Auth from './components/Auth';
+import { useAuth } from './contexts/AuthContext';
 
 const API_BASE_URL = 'http://localhost:5000';
 
-function App() {
+// Main App Content Component
+const AppContent = () => {
   const [message, setMessage] = useState('');
   const [healthStatus, setHealthStatus] = useState(null);
   const [loading, setLoading] = useState(false);
+  const { user, logout, isAuthenticated } = useAuth();
 
   useEffect(() => {
     fetchHealthStatus();
@@ -28,9 +34,30 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header" style={{ padding: '20px', textAlign: 'center' }}>
-        <h1>DevSphere MERN Project</h1>
-        <p>Welcome to your MERN stack application!</p>
+      <Auth />
+      
+      {isAuthenticated && (
+        <header className="App-header" style={{ padding: '20px', textAlign: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+            <h1>DevSphere MERN Project</h1>
+            <div>
+              <span style={{ marginRight: '15px' }}>Welcome, {user?.name}!</span>
+              <button 
+                onClick={logout}
+                style={{
+                  padding: '8px 16px',
+                  backgroundColor: '#dc3545',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer'
+                }}
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+          <p>Welcome to your MERN stack application!</p>
         
         <div style={{ margin: '20px 0' }}>
           <button 
@@ -73,12 +100,24 @@ function App() {
           </div>
         )}
 
-        <hr style={{ margin: '30px 0', borderColor: '#ccc' }} />
-        
-        {/* User List Component */}
-        <UserList />
-      </header>
+          <hr style={{ margin: '30px 0', borderColor: '#ccc' }} />
+          
+          {/* User List Component */}
+          <UserList />
+        </header>
+      )}
     </div>
+  );
+};
+
+// Main App Component with Providers
+function App() {
+  return (
+    <ThemeProvider>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 
