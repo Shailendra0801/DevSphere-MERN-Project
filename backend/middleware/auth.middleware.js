@@ -39,12 +39,17 @@ const protect = async (req, res, next) => {
       return next(new ApiError(401, 'This account has been deactivated.'));
     }
     
-    // 6. Check if user changed password after token was issued
+    // 6. Check if token is blacklisted
+    if (currentUser.isTokenBlacklisted(token)) {
+      return next(new ApiError(401, 'Token has been invalidated. Please log in again.'));
+    }
+    
+    // 7. Check if user changed password after token was issued
     if (currentUser.changedPasswordAfter(decoded.iat)) {
       return next(new ApiError(401, 'User recently changed password. Please log in again.'));
     }
     
-    // 7. Grant access to protected route
+    // 8. Grant access to protected route
     req.user = currentUser;
     next();
   } catch (error) {
@@ -151,8 +156,37 @@ const securityHeaders = (req, res, next) => {
   next();
 };
 
+/**
+ * Optional auth middleware
+ * Attaches user to request if token is valid, but doesn't require authentication
+ */
+const optionalAuth = async (req, res, next) => {
+  try {
+    let token;
+    
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+      token = req.headers.authorization.split(' ')[1];
+    }
+    
+    if (token) {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const currentUser = await User.findById(decoded.id);
+      
+      if (currentUser && currentUser.isActive && !currentUser.isTokenBlacklisted(token)) {
+        req.user = currentUser;
+      }
+    }
+    
+    next();
+  } catch (error) {
+    // Silently continue without user if token is invalid
+    next();
+  }
+};
+
 module.exports = {
   protect,
+  optionalAuth,
   restrictTo,
   loginLimiter,
   passwordResetLimiter,

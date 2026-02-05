@@ -75,6 +75,11 @@ const validateLogin = [
     .notEmpty()
     .withMessage('Password is required'),
   
+  body('rememberMe')
+    .optional()
+    .isBoolean()
+    .withMessage('Remember me must be a boolean value'),
+  
   handleValidationErrors
 ];
 
@@ -170,6 +175,19 @@ const validateResendVerification = [
   handleValidationErrors
 ];
 
+/**
+ * Refresh token validation
+ * Validates refresh token input
+ */
+const validateRefreshToken = [
+  body('refreshToken')
+    .optional()
+    .isString()
+    .withMessage('Refresh token must be a string'),
+  
+  handleValidationErrors
+];
+
 module.exports = {
   validateRegistration,
   validateLogin,
@@ -178,5 +196,6 @@ module.exports = {
   validatePasswordUpdate,
   validateEmailVerification,
   validateResendVerification,
+  validateRefreshToken,
   handleValidationErrors
 };

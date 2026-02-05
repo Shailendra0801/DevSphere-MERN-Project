@@ -103,6 +103,23 @@ const userSchema = new mongoose.Schema({
     type: Date
   },
 
+  // Refresh token management
+  refreshToken: {
+    type: String,
+    select: false
+  },
+  
+  refreshTokenExpires: {
+    type: Date,
+    select: false
+  },
+  
+  // Blacklisted tokens for logout/security
+  blacklistedTokens: [{
+    token: String,
+    expiresAt: Date
+  }],
+
   // Timestamps
   createdAt: {
     type: Date,
@@ -255,6 +272,57 @@ userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
 };
 
 /**
+ * Instance method to generate refresh token
+ * Creates a secure refresh token for long-term authentication
+ */
+userSchema.methods.createRefreshToken = function() {
+  const refreshToken = require('crypto').randomBytes(64).toString('hex');
+  
+  this.refreshToken = refreshToken;
+  // Refresh token expires in 30 days
+  this.refreshTokenExpires = Date.now() + 30 * 24 * 60 * 60 * 1000;
+  
+  return refreshToken;
+};
+
+/**
+ * Instance method to validate refresh token
+ * Checks if refresh token is valid and not expired
+ */
+userSchema.methods.validateRefreshToken = function(token) {
+  return this.refreshToken === token && this.refreshTokenExpires > Date.now();
+};
+
+/**
+ * Instance method to blacklist a token
+ * Adds token to blacklist for security purposes
+ */
+userSchema.methods.blacklistToken = function(token, expiresAt) {
+  this.blacklistedTokens.push({
+    token,
+    expiresAt: expiresAt || Date.now() + 30 * 24 * 60 * 60 * 1000 // 30 days default
+  });
+  
+  // Clean up expired blacklisted tokens
+  this.blacklistedTokens = this.blacklistedTokens.filter(item => item.expiresAt > Date.now());
+};
+
+/**
+ * Instance method to check if token is blacklisted
+ */
+userSchema.methods.isTokenBlacklisted = function(token) {
+  return this.blacklistedTokens.some(item => item.token === token && item.expiresAt > Date.now());
+};
+
+/**
+ * Instance method to clear refresh token
+ */
+userSchema.methods.clearRefreshToken = function() {
+  this.refreshToken = undefined;
+  this.refreshTokenExpires = undefined;
+};
+
+/**
  * Static method to find active users
  */
 userSchema.statics.findActiveUsers = function() {
@@ -265,12 +333,55 @@ userSchema.statics.findActiveUsers = function() {
  * Static method to find user by email with security fields
  */
 userSchema.statics.findByEmailWithSecurity = function(email) {
-  return this.findOne({ email }).select('+password +passwordResetToken +passwordResetExpires +emailVerificationToken');
+  return this.findOne({ email }).select('+password +passwordResetToken +passwordResetExpires +emailVerificationToken +refreshToken +refreshTokenExpires +blacklistedTokens');
+};
+
+/**
+ * Static method to find user by refresh token
+ */
+userSchema.statics.findByRefreshToken = function(refreshToken) {
+  return this.findOne({ 
+    refreshToken: refreshToken,
+    refreshTokenExpires: { $gt: Date.now() }
+  }).select('+refreshToken +refreshTokenExpires +blacklistedTokens');
+};
+
+/**
+ * Static method to cleanup expired tokens
+ * Removes expired refresh tokens and blacklisted tokens
+ */
+userSchema.statics.cleanupExpiredTokens = async function() {
+  const now = Date.now();
+  
+  // Clear expired refresh tokens
+  await this.updateMany(
+    { refreshTokenExpires: { $lt: now } },
+    { 
+      $unset: { refreshToken: '', refreshTokenExpires: '' },
+      $pull: { blacklistedTokens: { expiresAt: { $lt: now } } }
+    }
+  );
+  
+  // Clean up expired blacklisted tokens
+  await this.updateMany(
+    { 'blacklistedTokens.expiresAt': { $lt: now } },
+    { $pull: { blacklistedTokens: { expiresAt: { $lt: now } } } }
+  );
 };
 
 /**
  * Create and export User model
  */
 const User = mongoose.model('User', userSchema);
+
+// Schedule periodic cleanup of expired tokens
+setInterval(async () => {
+  try {
+    await User.cleanupExpiredTokens();
+    console.log('Expired tokens cleaned up successfully');
+  } catch (error) {
+    console.error('Error cleaning up expired tokens:', error);
+  }
+}, 24 * 60 * 60 * 1000); // Run daily
 
 module.exports = User;

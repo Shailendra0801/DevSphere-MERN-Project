@@ -14,23 +14,51 @@ const { sendEmail } = require('../utils/email');
  */
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN || '7d'
+    expiresIn: process.env.JWT_EXPIRES_IN || '15m' // Short-lived access token
   });
 };
 
 /**
- * Create and send token response
- * Generates JWT and sends response with token
+ * Generate Refresh Token
+ * Creates a long-lived refresh token
  */
-const createSendToken = (user, statusCode, res) => {
-  const token = signToken(user._id);
+const generateRefreshToken = (user) => {
+  return user.createRefreshToken();
+};
+
+/**
+ * Create and send token response
+ * Generates JWT and refresh tokens and sends response
+ */
+const createSendToken = async (user, statusCode, res, sendRefreshToken = true) => {
+  const accessToken = signToken(user._id);
+  let refreshToken = null;
   
-  // Remove password from output
+  if (sendRefreshToken) {
+    refreshToken = generateRefreshToken(user);
+    await user.save({ validateBeforeSave: false });
+  }
+  
+  // Remove sensitive data from output
   user.password = undefined;
+  
+  // Cookie options
+  const cookieOptions = {
+    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict'
+  };
+  
+  // Send refresh token in cookie if requested
+  if (sendRefreshToken && refreshToken) {
+    res.cookie('refreshToken', refreshToken, cookieOptions);
+  }
   
   res.status(statusCode).json({
     status: 'success',
-    token,
+    accessToken,
+    ...(sendRefreshToken && refreshToken ? { refreshToken } : {}),
     data: {
       user: user.getPublicProfile()
     }
@@ -93,11 +121,11 @@ exports.register = asyncHandler(async (req, res, next) => {
  * @access  Public
  */
 exports.login = asyncHandler(async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, rememberMe = false } = req.body;
   
   // Check if email and password exist
   if (!email || !password) {
-    return next(new ApiError(400, 'Please provide email and password'));
+    return next(new ApiError(400, 'Please provide email and password'));  
   }
   
   // Check if user exists and password is correct
@@ -123,8 +151,8 @@ exports.login = asyncHandler(async (req, res, next) => {
   user.lastLogin = Date.now();
   await user.save({ validateBeforeSave: false });
   
-  // Create and send token
-  createSendToken(user, 200, res);
+  // Create and send tokens
+  await createSendToken(user, 200, res, rememberMe);
 });
 
 /**
@@ -133,10 +161,71 @@ exports.login = asyncHandler(async (req, res, next) => {
  * @access  Private
  */
 exports.logout = asyncHandler(async (req, res, next) => {
-  res.status(200).json({
-    status: 'success',
-    message: 'Logged out successfully'
-  });
+  try {
+    // Blacklist current access token
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+      const token = req.headers.authorization.split(' ')[1];
+      req.user.blacklistToken(token);
+    }
+    
+    // Clear refresh token
+    req.user.clearRefreshToken();
+    await req.user.save({ validateBeforeSave: false });
+    
+    // Clear refresh token cookie
+    res.clearCookie('refreshToken');
+    
+    res.status(200).json({
+      status: 'success',
+      message: 'Logged out successfully'
+    });
+  } catch (error) {
+    return next(new ApiError(500, 'Error during logout process'));
+  }
+});
+
+/**
+ * @desc    Refresh access token
+ * @route   POST /api/v1/auth/refresh-token
+ * @access  Public
+ */
+exports.refreshToken = asyncHandler(async (req, res, next) => {
+  try {
+    // Get refresh token from cookie or body
+    const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
+    
+    if (!refreshToken) {
+      return next(new ApiError(401, 'No refresh token provided'));
+    }
+    
+    // Find user by refresh token
+    const user = await User.findByRefreshToken(refreshToken);
+    
+    if (!user) {
+      return next(new ApiError(401, 'Invalid refresh token'));
+    }
+    
+    // Check if user is active
+    if (!user.isActive) {
+      return next(new ApiError(401, 'Account has been deactivated'));
+    }
+    
+    // Generate new access token
+    const newAccessToken = signToken(user._id);
+    
+    // Remove password from output
+    user.password = undefined;
+    
+    res.status(200).json({
+      status: 'success',
+      accessToken: newAccessToken,
+      data: {
+        user: user.getPublicProfile()
+      }
+    });
+  } catch (error) {
+    return next(new ApiError(401, 'Invalid refresh token'));
+  }
 });
 
 /**

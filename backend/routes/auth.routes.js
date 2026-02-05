@@ -18,7 +18,8 @@ const {
   validatePasswordReset,
   validatePasswordUpdate,
   validateEmailVerification,
-  validateResendVerification
+  validateResendVerification,
+  validateRefreshToken
 } = require('../middleware/auth.validation');
 
 /**
@@ -41,6 +42,13 @@ router.post('/login', validateLogin, authController.login);
  * @access  Private
  */
 router.post('/logout', protect, authController.logout);
+
+/**
+ * @desc    Refresh access token
+ * @route   POST /api/v1/auth/refresh-token
+ * @access  Public
+ */
+router.post('/refresh-token', validateRefreshToken, authController.refreshToken);
 
 /**
  * @desc    Get current user profile

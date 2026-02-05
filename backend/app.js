@@ -7,6 +7,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
 
 // Import custom middleware
 const { requestLogger, errorLogger, successLogger } = require('./middleware/logger');
@@ -42,6 +43,7 @@ app.use(cors({
 }));
 
 // Built-in middleware
+app.use(cookieParser());                    // Parse cookies
 app.use(express.json({ limit: '10mb' }));           // Parse JSON bodies
 app.use(express.urlencoded({ extended: true }));    // Parse URL-encoded bodies
 
