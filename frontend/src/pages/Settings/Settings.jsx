@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Settings: React.FC = () => {
+const Settings = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">

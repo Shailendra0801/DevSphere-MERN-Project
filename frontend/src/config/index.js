@@ -26,7 +26,6 @@ const config = {
   // Retry Configuration
   API_RETRY_ATTEMPTS: parseInt(import.meta.env.VITE_API_RETRY_ATTEMPTS || '3'),
   API_RETRY_DELAY: parseInt(import.meta.env.VITE_API_RETRY_DELAY || '1000'),
-} as const;
+};
 
-export type Config = typeof config;
 export default config;

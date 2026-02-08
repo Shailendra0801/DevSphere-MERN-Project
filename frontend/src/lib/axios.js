@@ -1,25 +1,8 @@
 import axios from 'axios';
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import config from '../config';
 
-// Define custom error types
-export interface ApiError {
-  message: string;
-  status?: number;
-  code?: string;
-  errors?: Record<string, string[]>;
-}
-
-// Define response structure
-export interface ApiResponse<T = unknown> {
-  status: 'success' | 'fail' | 'error';
-  data?: T;
-  message?: string;
-  error?: ApiError;
-}
-
 // Create axios instance
-const apiClient: AxiosInstance = axios.create({
+const apiClient = axios.create({
   baseURL: config.API_BASE_URL,
   timeout: config.API_TIMEOUT,
   headers: {
@@ -29,7 +12,7 @@ const apiClient: AxiosInstance = axios.create({
 
 // Request interceptor
 apiClient.interceptors.request.use(
-  (requestConfig: InternalAxiosRequestConfig) => {
+  (requestConfig) => {
     // Add authentication token if available
     const token = localStorage.getItem(config.TOKEN_KEY);
     if (token) {
@@ -59,7 +42,7 @@ apiClient.interceptors.request.use(
 
 // Response interceptor
 apiClient.interceptors.response.use(
-  (response: AxiosResponse<ApiResponse>) => {
+  (response) => {
     // Log successful response in development
     if (config.ENABLE_LOGGING) {
       console.log(`[API Response] ${response.config.method?.toUpperCase()} ${response.config.url}`, {
@@ -127,22 +110,22 @@ apiClient.interceptors.response.use(
 );
 
 // Helper functions
-export const setAuthToken = (token: string): void => {
+export const setAuthToken = (token) => {
   localStorage.setItem(config.TOKEN_KEY, token);
 };
 
-export const removeAuthToken = (): void => {
+export const removeAuthToken = () => {
   localStorage.removeItem(config.TOKEN_KEY);
 };
 
-export const getAuthToken = (): string | null => {
+export const getAuthToken = () => {
   return localStorage.getItem(config.TOKEN_KEY);
 };
 
-export const isAuthenticated = (): boolean => {
+export const isAuthenticated = () => {
   const token = getAuthToken();
   if (!token) return false;
-  
+
   // Check if token is expired (simplified check)
   try {
     const payload = JSON.parse(atob(token.split('.')[1]));
@@ -154,6 +137,3 @@ export const isAuthenticated = (): boolean => {
 
 // Export the configured axios instance
 export default apiClient;
-
-// Export types for convenience
-export type { AxiosInstance, AxiosRequestConfig, AxiosResponse };

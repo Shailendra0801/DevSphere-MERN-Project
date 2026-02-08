@@ -1,20 +1,15 @@
 import { Navigate, useLocation } from 'react-router-dom';
 
 // Temporary authentication check - will be replaced with actual auth logic
-const isAuthenticated = (): boolean => {
+const isAuthenticated = () => {
   return !!localStorage.getItem('auth_token');
 };
-
-interface ProtectedRouteProps {
-  children: React.ReactNode;
-  redirectTo?: string;
-}
 
 /**
  * Protected Route Component
  * Wraps routes that require authentication
  */
-export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
+export const ProtectedRoute = ({ 
   children, 
   redirectTo = '/login' 
 }) => {
@@ -28,16 +23,11 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   return <>{children}</>;
 };
 
-interface GuestRouteProps {
-  children: React.ReactNode;
-  redirectTo?: string;
-}
-
 /**
  * Guest Route Component
  * Wraps routes that should only be accessible to unauthenticated users
  */
-export const GuestRoute: React.FC<GuestRouteProps> = ({ 
+export const GuestRoute = ({ 
   children, 
   redirectTo = '/dashboard' 
 }) => {
@@ -48,18 +38,11 @@ export const GuestRoute: React.FC<GuestRouteProps> = ({
   return <>{children}</>;
 };
 
-interface RoleBasedRouteProps {
-  children: React.ReactNode;
-  allowedRoles: string[];
-  userRole?: string;
-  redirectTo?: string;
-}
-
 /**
  * Role-Based Route Component
  * Wraps routes that require specific user roles
  */
-export const RoleBasedRoute: React.FC<RoleBasedRouteProps> = ({ 
+export const RoleBasedRoute = ({ 
   children, 
   allowedRoles, 
   userRole,
