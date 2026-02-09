@@ -1,0 +1,272 @@
+/* Authentication Pages Styles */
+
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    hsl(var(--color-background)) 0%,
+    hsl(var(--color-muted)) 100%
+  );
+  padding: 3rem 1rem;
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.auth-card {
+  max-width: 28rem;
+  width: 100%;
+  transform: translateY(0);
+  transition: all 0.5s ease;
+}
+
+.auth-card:hover {
+  transform: scale(1.02);
+}
+
+.auth-header {
+  text-align: center;
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+.auth-logo {
+  margin: 0 auto 1rem;
+  height: 4rem;
+  width: 4rem;
+  background: linear-gradient(135deg, hsl(var(--color-primary)) 0%, hsl(330, 80%, 60%) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(0deg);
+  transition: transform 0.3s ease;
+}
+
+.auth-logo:hover {
+  transform: rotate(12deg);
+}
+
+.auth-title {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: hsl(var(--color-foreground));
+  transition: color 0.3s ease;
+}
+
+.auth-subtitle {
+  margin-top: 0.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: hsl(var(--color-muted-foreground));
+  transition: color 0.3s ease;
+}
+
+.auth-form {
+  margin-top: 2rem;
+  animation: slideUp 0.6s ease-out 0.1s forwards;
+  opacity: 0;
+}
+
+.auth-input-group {
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transform: translateX(0);
+  transition: all 0.3s ease;
+}
+
+.auth-input-group:hover {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.auth-input {
+  appearance: none;
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid hsl(var(--color-input));
+  background-color: hsl(var(--color-background));
+  color: hsl(var(--color-foreground));
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.auth-input:first-child {
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.auth-input:not(:first-child) {
+  border-top: 0;
+}
+
+.auth-input:last-child {
+  border-radius: 0 0 0.5rem 0.5rem;
+  padding-right: 3rem;
+}
+
+.auth-input::placeholder {
+  color: hsl(var(--color-muted-foreground));
+}
+
+.auth-input:focus {
+  outline: none;
+  border-color: hsl(var(--color-ring));
+  box-shadow: 0 0 0 3px hsl(var(--color-ring) / 0.2);
+}
+
+.password-toggle-btn {
+  position: absolute;
+  inset-y: 0;
+  right: 0;
+  padding-right: 0.75rem;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+  color: hsl(var(--color-muted-foreground));
+}
+
+.password-toggle-btn:hover {
+  color: hsl(var(--color-primary));
+}
+
+.form-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  animation: fadeIn 0.6s ease-out 0.2s forwards;
+  opacity: 0;
+}
+
+.remember-checkbox {
+  height: 1rem;
+  width: 1rem;
+  color: hsl(var(--color-primary));
+  border: 1px solid hsl(var(--color-input));
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.remember-checkbox:hover {
+  transform: scale(1.1);
+}
+
+.forgot-password-link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: hsl(var(--color-primary));
+  transition: all 0.2s ease;
+  transform: scale(1);
+  display: inline-block;
+}
+
+.forgot-password-link:hover {
+  color: hsl(var(--color-primary) / 0.8);
+  text-decoration: underline;
+  transform: scale(1.05);
+}
+
+.submit-button {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  border: 1px solid transparent;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  color: hsl(var(--color-primary-foreground));
+  background: linear-gradient(
+    90deg,
+    hsl(var(--color-primary)) 0%,
+    hsl(var(--color-primary) / 0.9) 100%
+  );
+  transition: all 0.3s ease;
+  animation: fadeIn 0.6s ease-out 0.3s forwards;
+  opacity: 0;
+}
+
+.submit-button:hover {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--color-primary) / 0.9) 0%,
+    hsl(var(--color-primary) / 0.8) 100%
+  );
+  transform: scale(1.02);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.submit-button:active {
+  transform: scale(0.98);
+}
+
+.submit-button-icon {
+  position: absolute;
+  left: 0;
+  inset-y: 0;
+  display: flex;
+  align-items: center;
+  padding-left: 0.75rem;
+  color: hsl(var(--color-primary-foreground) / 0.8);
+  transition: color 0.2s ease;
+}
+
+.submit-button:hover .submit-button-icon {
+  color: hsl(var(--color-primary-foreground) / 0.7);
+}
+
+/* Register specific styles */
+.register-logo-gradient {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--color-primary)) 0%,
+    hsl(330, 80%, 60%) 100%
+  );
+}
+
+.input-with-icon {
+  position: relative;
+  transform: translateX(0);
+  transition: all 0.3s ease;
+}
+
+.input-with-icon:hover {
+  transform: translateX(0.25rem);
+}
+
+.confirm-password-input {
+  position: relative;
+  transform: translateX(0);
+  transition: all 0.3s ease;
+}
+
+.confirm-password-input:hover {
+  transform: translateX(0.25rem);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

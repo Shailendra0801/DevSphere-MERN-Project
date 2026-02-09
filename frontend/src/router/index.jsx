@@ -1,11 +1,13 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import React from 'react';
+import { createBrowserRouter } from 'react-router-dom';
 import App from '../App';
 import { ProtectedRoute, GuestRoute } from '../components/Routing/ProtectedRoute';
 
 // Import page components
-import Dashboard from '../pages/Dashboard/Dashboard';
+import LandingPage from '../pages/landing/LandingPage';
 import Login from '../pages/Auth/Login';
 import Register from '../pages/Auth/Register';
+import Dashboard from '../pages/Dashboard/Dashboard';
 import Profile from '../pages/Profile/Profile';
 import Settings from '../pages/Settings/Settings';
 import NotFound from '../pages/NotFound/NotFound';
@@ -23,7 +25,7 @@ export const routes = [
       // Public routes
       {
         index: true,
-        element: <Navigate to="/dashboard" replace />,
+        element: <LandingPage />,
       },
       {
         path: 'login',

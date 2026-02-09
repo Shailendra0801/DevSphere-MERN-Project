@@ -1,4 +1,7 @@
+import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import './routing.css';
 
 // Temporary authentication check - will be replaced with actual auth logic
 const isAuthenticated = () => {
@@ -23,6 +26,11 @@ export const ProtectedRoute = ({
   return <>{children}</>;
 };
 
+ProtectedRoute.propTypes = {
+  children: PropTypes.node.isRequired,
+  redirectTo: PropTypes.string
+};
+
 /**
  * Guest Route Component
  * Wraps routes that should only be accessible to unauthenticated users
@@ -36,6 +44,11 @@ export const GuestRoute = ({
   }
   
   return <>{children}</>;
+};
+
+GuestRoute.propTypes = {
+  children: PropTypes.node.isRequired,
+  redirectTo: PropTypes.string
 };
 
 /**
@@ -59,6 +72,13 @@ export const RoleBasedRoute = ({
   }
   
   return <>{children}</>;
+};
+
+RoleBasedRoute.propTypes = {
+  children: PropTypes.node.isRequired,
+  allowedRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
+  userRole: PropTypes.string,
+  redirectTo: PropTypes.string
 };
 
 export default ProtectedRoute;

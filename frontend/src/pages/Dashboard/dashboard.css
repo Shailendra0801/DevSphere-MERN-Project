@@ -1,0 +1,119 @@
+/* Dashboard Page Styles */
+
+.dashboard-container {
+  container: mx-auto;
+  padding: 0 1rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.dashboard-card {
+  background-color: hsl(var(--color-background));
+  color: hsl(var(--color-foreground));
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.dashboard-card:hover {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.dashboard-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: hsl(var(--color-foreground));
+  margin-bottom: 1rem;
+  transition: color 0.3s ease;
+}
+
+.dashboard-description {
+  color: hsl(var(--color-muted-foreground));
+  line-height: 1.5;
+  transition: color 0.3s ease;
+}
+
+.stats-grid {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.stat-card {
+  background-color: hsl(var(--color-primary) / 0.05);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  background-color: hsl(var(--color-primary) / 0.1);
+  transform: translateY(-2px);
+}
+
+.stat-card.blue {
+  background-color: hsl(217, 91%, 60%, 0.1);
+  border: 1px solid hsl(217, 91%, 60%, 0.2);
+}
+
+.stat-card.blue:hover {
+  background-color: hsl(217, 91%, 60%, 0.2);
+}
+
+.stat-card.green {
+  background-color: hsl(142, 71%, 45%, 0.1);
+  border: 1px solid hsl(142, 71%, 45%, 0.2);
+}
+
+.stat-card.green:hover {
+  background-color: hsl(142, 71%, 45%, 0.2);
+}
+
+.stat-card.purple {
+  background-color: hsl(270, 71%, 55%, 0.1);
+  border: 1px solid hsl(270, 71%, 55%, 0.2);
+}
+
+.stat-card.purple:hover {
+  background-color: hsl(270, 71%, 55%, 0.2);
+}
+
+.stat-title {
+  font-weight: 600;
+  color: hsl(var(--color-foreground));
+  transition: color 0.3s ease;
+}
+
+.stat-description {
+  margin-top: 0.5rem;
+  color: hsl(var(--color-muted-foreground));
+  transition: color 0.3s ease;
+}
+
+/* Dark theme specific adjustments */
+[data-theme='dark'] .stat-card.blue {
+  background-color: hsl(217, 91%, 60%, 0.1);
+}
+
+[data-theme='dark'] .stat-card.green {
+  background-color: hsl(142, 71%, 45%, 0.1);
+}
+
+[data-theme='dark'] .stat-card.purple {
+  background-color: hsl(270, 71%, 55%, 0.1);
+}

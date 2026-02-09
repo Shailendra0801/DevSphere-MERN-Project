@@ -1,4 +1,5 @@
 import React from 'react';
+import './dashboard.css';
 
 const Dashboard = () => {
   return (
@@ -8,7 +9,7 @@ const Dashboard = () => {
           Dashboard
         </h1>
         <p className="text-gray-600 dark:text-gray-300">
-          Welcome to your dashboard! This is where you'll see your main application content.
+          Welcome to your dashboard! This is where you&apos;ll see your main application content.
         </p>
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">

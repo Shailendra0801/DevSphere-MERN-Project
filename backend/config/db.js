@@ -23,6 +23,8 @@ const connectDB = async () => {
     const connectionOptions = {
       // useNewUrlParser and useUnifiedTopology are deprecated in newer versions
       // They are now default behaviors and don't need to be specified
+      serverSelectionTimeoutMS: 5000, // Timeout after 5 seconds
+      connectTimeoutMS: 10000, // Give up initial connection after 10 seconds
     };
 
     // Attempt to connect to MongoDB
@@ -53,9 +55,14 @@ const connectDB = async () => {
     });
 
   } catch (error) {
-    // Log connection error and exit
+    // Log connection error but don't exit in development
     console.error('MongoDB connection failed:', error.message);
-    process.exit(1);
+    console.warn('⚠️  Server will start without database connection');
+    console.warn('🔧 Fix your MongoDB connection string in .env file');
+    // Don't exit in development mode
+    if (process.env.NODE_ENV === 'production') {
+      process.exit(1);
+    }
   }
 };
 

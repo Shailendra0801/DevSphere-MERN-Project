@@ -1,0 +1,219 @@
+/* Settings Page Styles */
+
+.settings-container {
+  container: mx-auto;
+  padding: 0 1rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.settings-card {
+  background-color: hsl(var(--color-background));
+  color: hsl(var(--color-foreground));
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.settings-card:hover {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.settings-header {
+  margin-bottom: 2rem;
+}
+
+.settings-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: hsl(var(--color-foreground));
+  margin-bottom: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.settings-description {
+  color: hsl(var(--color-muted-foreground));
+  line-height: 1.5;
+  transition: color 0.3s ease;
+}
+
+.settings-tabs {
+  display: flex;
+  border-bottom: 1px solid hsl(var(--color-border));
+  margin-bottom: 2rem;
+}
+
+.settings-tab {
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  color: hsl(var(--color-muted-foreground));
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.settings-tab:hover {
+  color: hsl(var(--color-foreground));
+}
+
+.settings-tab.active {
+  color: hsl(var(--color-primary));
+  border-bottom-color: hsl(var(--color-primary));
+}
+
+.settings-content {
+  margin-top: 1.5rem;
+}
+
+.settings-section {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid hsl(var(--color-border));
+}
+
+.settings-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.settings-section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: hsl(var(--color-foreground));
+  margin-bottom: 1rem;
+  transition: color 0.3s ease;
+}
+
+.settings-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: hsl(var(--color-muted) / 0.3);
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  transition: all 0.2s ease;
+}
+
+.settings-option:hover {
+  background-color: hsl(var(--color-muted) / 0.5);
+  transform: translateX(0.25rem);
+}
+
+.settings-option-content {
+  flex: 1;
+}
+
+.settings-option-title {
+  font-weight: 500;
+  color: hsl(var(--color-foreground));
+  margin-bottom: 0.25rem;
+  transition: color 0.3s ease;
+}
+
+.settings-option-description {
+  font-size: 0.875rem;
+  color: hsl(var(--color-muted-foreground));
+  transition: color 0.3s ease;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 3rem;
+  height: 1.5rem;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: hsl(var(--color-input));
+  transition: .4s;
+  border-radius: 1.5rem;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 1.25rem;
+  width: 1.25rem;
+  left: 0.125rem;
+  bottom: 0.125rem;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+  background-color: hsl(var(--color-primary));
+}
+
+input:checked + .toggle-slider:before {
+  transform: translateX(1.5rem);
+}
+
+.save-settings-btn {
+  background-color: hsl(var(--color-primary));
+  color: hsl(var(--color-primary-foreground));
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.save-settings-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.danger-zone {
+  border: 1px solid hsl(var(--color-destructive) / 0.3);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.danger-zone-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: hsl(var(--color-destructive));
+  margin-bottom: 0.5rem;
+}
+
+.danger-zone-description {
+  color: hsl(var(--color-muted-foreground));
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.delete-account-btn {
+  background-color: hsl(var(--color-destructive));
+  color: hsl(var(--color-destructive-foreground));
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.delete-account-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}

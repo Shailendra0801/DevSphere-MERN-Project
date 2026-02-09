@@ -1,4 +1,5 @@
 import React from 'react';
+import './unauthorized.css';
 
 const Unauthorized = () => {
   return (
@@ -7,7 +8,7 @@ const Unauthorized = () => {
         <h1 className="text-6xl font-bold text-gray-900 dark:text-white">403</h1>
         <h2 className="text-2xl font-semibold text-gray-700 dark:text-gray-300 mt-4">Access Denied</h2>
         <p className="text-gray-500 dark:text-gray-400 mt-2">
-          You don't have permission to access this resource.
+          You don&apos;t have permission to access this resource.
         </p>
         <a 
           href="/" 

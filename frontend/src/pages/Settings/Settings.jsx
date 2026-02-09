@@ -1,4 +1,5 @@
 import React from 'react';
+import './settings.css';
 
 const Settings = () => {
   return (
