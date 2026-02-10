@@ -1,9 +1,9 @@
 import React from 'react';
-import HeroSection from '../../components/landing/HeroSection.jsx';
-import FeaturesSection from '../../components/landing/FeaturesSection.jsx';
-import WorkflowSection from '../../components/landing/WorkflowSection.jsx';
-import Testimonials from '../../components/landing/Testimonials.jsx';
-import CTASection from '../../components/landing/CTASection.jsx';
+import HeroSection from '../../features/landing/HeroSection/HeroSection.jsx';
+import FeaturesSection from '../../features/landing/FeaturesSection/FeaturesSection.jsx';
+import WorkflowSection from '../../features/landing/WorkflowSection/WorkflowSection.jsx';
+import Testimonials from '../../features/landing/TestimonialsSection/TestimonialsSection.jsx';
+import CTASection from '../../features/landing/CTASection/CTASection.jsx';
 
 /**
  * Landing Page Component

@@ -1,0 +1,135 @@
+/* Card Component Styles - Scoped to this component only */
+
+.card {
+  border-radius: var(--radius);
+  transition: all var(--transition-speed) ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Size Variants */
+.card--small {
+  padding: 1rem;
+}
+
+.card--medium {
+  padding: 1.5rem;
+}
+
+.card--large {
+  padding: 2rem;
+}
+
+/* Border Variants */
+.card--bordered {
+  border: 1px solid hsl(var(--color-border));
+}
+
+.card--noBorder {
+  border: none;
+}
+
+/* Elevation Variant */
+.card--elevated {
+  box-shadow: var(--shadow-lg);
+}
+
+.card--elevated:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
+}
+
+/* Color Variants */
+.card--default {
+  background-color: hsl(var(--color-card));
+  color: hsl(var(--color-card-foreground));
+}
+
+.card--primary {
+  background-color: hsl(var(--color-primary) / 0.1);
+  color: hsl(var(--color-primary));
+  border: 1px solid hsl(var(--color-primary) / 0.2);
+}
+
+.card--secondary {
+  background-color: hsl(var(--color-secondary));
+  color: hsl(var(--color-secondary-foreground));
+  border: 1px solid hsl(var(--color-border));
+}
+
+.card--success {
+  background-color: hsl(142, 71%, 45%, 0.1);
+  color: hsl(142, 71%, 45%);
+  border: 1px solid hsl(142, 71%, 45%, 0.2);
+}
+
+.card--warning {
+  background-color: hsl(43, 96%, 56%, 0.1);
+  color: hsl(43, 96%, 56%);
+  border: 1px solid hsl(43, 96%, 56%, 0.2);
+}
+
+.card--danger {
+  background-color: hsl(var(--color-destructive) / 0.1);
+  color: hsl(var(--color-destructive));
+  border: 1px solid hsl(var(--color-destructive) / 0.2);
+}
+
+.card--info {
+  background-color: hsl(217, 91%, 60%, 0.1);
+  color: hsl(217, 91%, 60%);
+  border: 1px solid hsl(217, 91%, 60%, 0.2);
+}
+
+/* Hover Effects */
+.card--default:hover,
+.card--secondary:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.card--primary:hover,
+.card--success:hover,
+.card--warning:hover,
+.card--danger:hover,
+.card--info:hover {
+  background-color: hsla(var(--color-primary), 0.15);
+  transform: translateY(-1px);
+}
+
+/* Focus States */
+.card:focus-within {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* Dark Theme Adjustments */
+[data-theme='dark'] .card--default {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+}
+
+[data-theme='dark'] .card--elevated {
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+}
+
+[data-theme='dark'] .card--elevated:hover {
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4), 0 10px 12px -8px rgb(0 0 0 / 0.4);
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+  
+  .card--elevated:hover,
+  .card--default:hover,
+  .card--secondary:hover,
+  .card--primary:hover,
+  .card--success:hover,
+  .card--warning:hover,
+  .card--danger:hover,
+  .card--info:hover {
+    transform: none;
+  }
+}

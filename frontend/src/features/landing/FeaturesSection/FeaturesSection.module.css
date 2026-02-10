@@ -1,0 +1,370 @@
+/* Features Section Styles - Scoped to this component only */
+
+.featuresSection {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  background-color: hsl(0, 0%, 100%);
+}
+
+@media (min-width: 768px) {
+  .featuresSection {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+}
+
+[data-theme='dark'] .featuresSection {
+  background-color: hsl(0, 0%, 0%);
+}
+
+.container {
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: hsl(222.2, 47.4%, 11.2%);
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: 2.25rem;
+  }
+}
+
+[data-theme='dark'] .title {
+  color: white;
+}
+
+.highlightedText {
+  background: linear-gradient(90deg, hsl(217, 91%, 60%), hsl(270, 91%, 60%));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: hsl(215.4, 16.3%, 46.9%);
+  max-width: 48rem;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.75;
+}
+
+[data-theme='dark'] .subtitle {
+  color: hsl(0, 0%, 80%);
+}
+
+/* Features Grid */
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 2rem;
+  margin-bottom: 5rem;
+}
+
+@media (min-width: 768px) {
+  .featuresGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .featuresGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+  }
+}
+
+/* Feature Card */
+.featureCard {
+  background-color: hsl(210, 20%, 98%);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  border: 1px solid hsl(214.3, 31.8%, 91.4%);
+}
+
+[data-theme='dark'] .featureCard {
+  background-color: hsl(0, 0%, 15%);
+  border: 1px solid hsl(0, 0%, 25%);
+}
+
+.featureCard:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transform: translateY(-0.5rem);
+}
+
+[data-theme='dark'] .featureCard:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+/* Feature Icon */
+.featureIconWrapper {
+  display: inline-flex;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  background-color: hsl(217, 91%, 90%);
+  margin-bottom: 1rem;
+}
+
+[data-theme='dark'] .featureIconWrapper {
+  background-color: hsla(217, 91%, 60%, 0.2);
+}
+
+.featureIcon {
+  height: 1.5rem;
+  width: 1.5rem;
+  color: hsl(217, 91%, 60%);
+}
+
+[data-theme='dark'] .featureIcon {
+  color: hsl(217, 91%, 70%);
+}
+
+/* Feature Title */
+.featureTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: hsl(222.2, 47.4%, 11.2%);
+  margin-bottom: 0.5rem;
+}
+
+[data-theme='dark'] .featureTitle {
+  color: white;
+}
+
+/* Feature Description */
+.featureDescription {
+  color: hsl(215.4, 16.3%, 46.9%);
+  line-height: 1.625;
+}
+
+[data-theme='dark'] .featureDescription {
+  color: hsl(0, 0%, 80%);
+}
+
+/* Integrations Section */
+.integrationsSection {
+  background: linear-gradient(90deg, hsl(211, 100%, 95%), hsl(270, 100%, 95%));
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
+@media (min-width: 768px) {
+  .integrationsSection {
+    padding: 3rem;
+  }
+}
+
+[data-theme='dark'] .integrationsSection {
+  background: linear-gradient(90deg, hsl(0, 0%, 15%), hsl(0, 0%, 15%));
+}
+
+/* Integrations Header */
+.integrationsHeader {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.integrationsTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: hsl(222.2, 47.4%, 11.2%);
+  margin-bottom: 1rem;
+}
+
+[data-theme='dark'] .integrationsTitle {
+  color: white;
+}
+
+.integrationsSubtitle {
+  color: hsl(215.4, 16.3%, 46.9%);
+}
+
+[data-theme='dark'] .integrationsSubtitle {
+  color: hsl(0, 0%, 80%);
+}
+
+/* Integrations Grid */
+.integrationsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+/* Integration Card */
+.integrationCard {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: white;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease;
+}
+
+[data-theme='dark'] .integrationCard {
+  background-color: hsl(0, 0%, 30%);
+}
+
+.integrationCard:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Integration Icon */
+.integrationIcon {
+  height: 1.25rem;
+  width: 1.25rem;
+  color: hsl(215.4, 16.3%, 46.9%);
+}
+
+[data-theme='dark'] .integrationIcon {
+  color: hsl(0, 0%, 80%);
+}
+
+/* Integration Name */
+.integrationName {
+  font-weight: 500;
+  color: hsl(222.2, 47.4%, 11.2%);
+}
+
+[data-theme='dark'] .integrationName {
+  color: hsl(0, 0%, 100%);
+}
+
+/* Color Variants for Feature Icons */
+.featureCard:nth-child(1) .featureIconWrapper {
+  background-color: hsl(217, 91%, 90%);
+}
+
+.featureCard:nth-child(1) .featureIcon {
+  color: hsl(217, 91%, 60%);
+}
+
+.featureCard:nth-child(2) .featureIconWrapper {
+  background-color: hsl(270, 91%, 90%);
+}
+
+.featureCard:nth-child(2) .featureIcon {
+  color: hsl(270, 91%, 60%);
+}
+
+.featureCard:nth-child(3) .featureIconWrapper {
+  background-color: hsl(142, 71%, 90%);
+}
+
+.featureCard:nth-child(3) .featureIcon {
+  color: hsl(142, 71%, 50%);
+}
+
+.featureCard:nth-child(4) .featureIconWrapper {
+  background-color: hsl(28, 91%, 90%);
+}
+
+.featureCard:nth-child(4) .featureIcon {
+  color: hsl(28, 91%, 60%);
+}
+
+.featureCard:nth-child(5) .featureIconWrapper {
+  background-color: hsl(330, 91%, 90%);
+}
+
+.featureCard:nth-child(5) .featureIcon {
+  color: hsl(330, 91%, 60%);
+}
+
+.featureCard:nth-child(6) .featureIconWrapper {
+  background-color: hsl(43, 96%, 90%);
+}
+
+.featureCard:nth-child(6) .featureIcon {
+  color: hsl(43, 96%, 56%);
+}
+
+/* Dark Theme Adjustments */
+[data-theme='dark'] .featureCard:nth-child(1) .featureIconWrapper {
+  background-color: hsla(217, 91%, 60%, 0.2);
+}
+
+[data-theme='dark'] .featureCard:nth-child(2) .featureIconWrapper {
+  background-color: hsla(270, 91%, 60%, 0.2);
+}
+
+[data-theme='dark'] .featureCard:nth-child(3) .featureIconWrapper {
+  background-color: hsla(142, 71%, 50%, 0.2);
+}
+
+[data-theme='dark'] .featureCard:nth-child(4) .featureIconWrapper {
+  background-color: hsla(28, 91%, 60%, 0.2);
+}
+
+[data-theme='dark'] .featureCard:nth-child(5) .featureIconWrapper {
+  background-color: hsla(330, 91%, 60%, 0.2);
+}
+
+[data-theme='dark'] .featureCard:nth-child(6) .featureIconWrapper {
+  background-color: hsla(43, 96%, 56%, 0.2);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 640px) {
+  .integrationsGrid {
+    gap: 1rem;
+  }
+  
+  .integrationCard {
+    padding: 0.75rem;
+  }
+  
+  .subtitle {
+    font-size: 1.125rem;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .featureCard {
+    transition: none;
+  }
+  
+  .featureCard:hover {
+    transform: none;
+  }
+  
+  .integrationCard {
+    transition: none;
+  }
+}

@@ -1,0 +1,379 @@
+/* Workflow Section Styles - Scoped to this component only */
+
+.workflowSection {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  background-color: hsl(210, 20%, 98%);
+}
+
+@media (min-width: 768px) {
+  .workflowSection {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+}
+
+[data-theme='dark'] .workflowSection {
+  background-color: hsl(0, 0%, 15%);
+}
+
+.container {
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: hsl(222.2, 47.4%, 11.2%);
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: 2.25rem;
+  }
+}
+
+[data-theme='dark'] .title {
+  color: white;
+}
+
+.highlightedText {
+  background: linear-gradient(90deg, hsl(217, 91%, 60%), hsl(270, 91%, 60%));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: hsl(215.4, 16.3%, 46.9%);
+  max-width: 48rem;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.75;
+}
+
+[data-theme='dark'] .subtitle {
+  color: hsl(0, 0%, 80%);
+}
+
+/* Workflow Container */
+.workflowContainer {
+  position: relative;
+  margin-bottom: 5rem;
+}
+
+/* Connecting Line */
+.connectingLine {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .connectingLine {
+    display: block;
+    position: absolute;
+    top: 6rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0.125rem;
+    height: 100%;
+    background: linear-gradient(to bottom, hsl(217, 91%, 60%), hsl(270, 91%, 60%));
+  }
+}
+
+/* Steps Grid */
+.stepsGrid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .stepsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .stepsGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2rem;
+  }
+}
+
+/* Step Container */
+.stepContainer {
+  position: relative;
+  text-align: center;
+}
+
+/* Step Number Wrapper */
+.stepNumberWrapper {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Step Number */
+.stepNumber {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: linear-gradient(90deg, hsl(217, 91%, 60%), hsl(270, 91%, 60%));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.stepContainer:hover .stepNumber {
+  transform: scale(1.1);
+}
+
+/* Step Icon Wrapper */
+.stepIconWrapper {
+  padding: 1rem;
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+  transition: box-shadow 0.2s ease;
+}
+
+[data-theme='dark'] .stepIconWrapper {
+  background-color: hsl(0, 0%, 30%);
+}
+
+.stepContainer:hover .stepIconWrapper {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Step Icon */
+.stepIcon {
+  height: 2rem;
+  width: 2rem;
+  color: hsl(217, 91%, 60%);
+}
+
+[data-theme='dark'] .stepIcon {
+  color: hsl(217, 91%, 70%);
+}
+
+/* Step Title */
+.stepTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: hsl(222.2, 47.4%, 11.2%);
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+[data-theme='dark'] .stepTitle {
+  color: white;
+}
+
+/* Step Description */
+.stepDescription {
+  color: hsl(215.4, 16.3%, 46.9%);
+  text-align: center;
+  line-height: 1.625;
+}
+
+[data-theme='dark'] .stepDescription {
+  color: hsl(0, 0%, 80%);
+}
+
+/* Arrow Icon */
+.arrowIcon {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .arrowIcon {
+    display: block;
+    position: absolute;
+    top: 2rem;
+    right: -1rem;
+    z-index: 0;
+  }
+}
+
+.arrowSvg {
+  height: 1.5rem;
+  width: 1.5rem;
+  color: hsl(214.3, 31.8%, 91.4%);
+}
+
+[data-theme='dark'] .arrowSvg {
+  color: hsl(0, 0%, 40%);
+}
+
+/* Benefits Card */
+.benefitsCard {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+@media (min-width: 768px) {
+  .benefitsCard {
+    padding: 3rem;
+  }
+}
+
+[data-theme='dark'] .benefitsCard {
+  background-color: hsl(0, 0%, 30%);
+}
+
+.benefitsTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: hsl(222.2, 47.4%, 11.2%);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+[data-theme='dark'] .benefitsTitle {
+  color: white;
+}
+
+/* Benefits Grid */
+.benefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .benefitsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Benefit Item */
+.benefitItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.checkIcon {
+  height: 1.25rem;
+  width: 1.25rem;
+  color: hsl(142, 71%, 45%);
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.benefitText {
+  color: hsl(222.2, 47.4%, 11.2%);
+  line-height: 1.625;
+}
+
+[data-theme='dark'] .benefitText {
+  color: hsl(0, 0%, 100%);
+}
+
+/* Color Variants for Step Icons */
+.stepContainer:nth-child(1) .stepIcon {
+  color: hsl(217, 91%, 60%);
+}
+
+.stepContainer:nth-child(2) .stepIcon {
+  color: hsl(142, 71%, 50%);
+}
+
+.stepContainer:nth-child(3) .stepIcon {
+  color: hsl(270, 91%, 60%);
+}
+
+.stepContainer:nth-child(4) .stepIcon {
+  color: hsl(43, 96%, 56%);
+}
+
+/* Dark Theme Adjustments */
+[data-theme='dark'] .stepContainer:nth-child(1) .stepIcon {
+  color: hsl(217, 91%, 70%);
+}
+
+[data-theme='dark'] .stepContainer:nth-child(2) .stepIcon {
+  color: hsl(142, 71%, 60%);
+}
+
+[data-theme='dark'] .stepContainer:nth-child(3) .stepIcon {
+  color: hsl(270, 91%, 70%);
+}
+
+[data-theme='dark'] .stepContainer:nth-child(4) .stepIcon {
+  color: hsl(43, 96%, 66%);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 640px) {
+  .title {
+    font-size: 1.5rem;
+  }
+  
+  .subtitle {
+    font-size: 1.125rem;
+  }
+  
+  .stepNumber {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.125rem;
+  }
+  
+  .stepIcon {
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .stepNumber,
+  .stepIconWrapper {
+    transition: none;
+  }
+  
+  .stepContainer:hover .stepNumber {
+    transform: none;
+  }
+  
+  .stepContainer:hover .stepIconWrapper {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+}

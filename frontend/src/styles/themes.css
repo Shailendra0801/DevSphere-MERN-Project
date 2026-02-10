@@ -1,14 +1,12 @@
-@import 'tailwindcss';
+/* Theme Variables - CSS Custom Properties for Light/Dark Themes */
 
-/* ================================
-   THEME CONFIGURATION
-================================ */
-
-/* Light Theme Variables */
+/* Light Theme (Default) */
 :root {
+  /* Core Colors */
   --color-background: 0 0% 100%;
   --color-foreground: 222.2 47.4% 11.2%;
   
+  /* Semantic Colors */
   --color-muted: 210 40% 96.1%;
   --color-muted-foreground: 215.4 16.3% 46.9%;
   
@@ -21,6 +19,7 @@
   --color-card: 0 0% 100%;
   --color-card-foreground: 222.2 47.4% 11.2%;
   
+  /* Brand Colors */
   --color-primary: 221.2 83.2% 53.3%;
   --color-primary-foreground: 210 40% 98%;
   
@@ -33,16 +32,26 @@
   --color-destructive: 0 100% 50%;
   --color-destructive-foreground: 210 40% 98%;
   
+  /* Interactive States */
   --color-ring: 215 20.2% 65.1%;
   
+  /* Spacing & Sizing */
   --radius: 0.5rem;
+  --transition-speed: 0.3s;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
-/* Dark Theme Variables - Pure Black Theme */
+/* Dark Theme */
 [data-theme='dark'] {
+  /* Core Colors */
   --color-background: 0 0% 0%; /* Pure black */
   --color-foreground: 0 0% 100%; /* White text */
   
+  /* Semantic Colors */
   --color-muted: 0 0% 10%; /* Very dark gray */
   --color-muted-foreground: 0 0% 80%; /* Light gray text */
   
@@ -55,6 +64,7 @@
   --color-card: 0 0% 5%; /* Nearly black card */
   --color-card-foreground: 0 0% 100%; /* White text */
   
+  /* Brand Colors */
   --color-primary: 217 91% 60%; /* Blue primary */
   --color-primary-foreground: 0 0% 100%; /* White text */
   
@@ -67,23 +77,26 @@
   --color-destructive: 0 100% 60%; /* Red */
   --color-destructive-foreground: 0 0% 100%; /* White */
   
+  /* Interactive States */
   --color-ring: 217 91% 60%; /* Blue ring */
 }
 
-/* ================================
-   BASE STYLES
-================================ */
-@layer base {
-  * {
-    border-width: 1px;
+/* High Contrast Theme (Accessibility) */
+@media (prefers-contrast: high) {
+  :root {
+    --color-border: 220 13% 20%;
+    --color-input: 220 13% 20%;
   }
+  
+  [data-theme='dark'] {
+    --color-border: 0 0% 30%;
+    --color-input: 0 0% 25%;
+  }
+}
 
-  body {
-    background-color: hsl(var(--color-background));
-    color: hsl(var(--color-foreground));
-    font-feature-settings: "rlig" 1, "calt" 1;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    margin: 0;
-    padding: 0;
+/* Reduced Motion Theme */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-speed: 0s;
   }
 }

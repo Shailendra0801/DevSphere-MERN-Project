@@ -1,0 +1,283 @@
+/* Input Component Styles - Scoped to this component only */
+
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+/* Label Styles */
+.label {
+  display: block;
+  font-weight: 500;
+  color: hsl(var(--color-foreground));
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+[data-theme='dark'] .label {
+  color: white;
+}
+
+.required {
+  color: hsl(var(--color-destructive));
+  margin-left: 0.25rem;
+}
+
+/* Input Container */
+.inputContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Input Field */
+.input {
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid hsl(var(--color-input));
+  background-color: hsl(var(--color-background));
+  color: hsl(var(--color-foreground));
+  transition: all var(--transition-speed) ease;
+  font-family: inherit;
+}
+
+.input:focus {
+  outline: none;
+  border-color: hsl(var(--color-ring));
+  box-shadow: 0 0 0 3px hsla(var(--color-ring), 0.2);
+}
+
+.input::placeholder {
+  color: hsl(var(--color-muted-foreground));
+}
+
+/* Size Variants */
+.input--small {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  min-height: 2rem;
+}
+
+.input--medium {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  min-height: 2.75rem;
+}
+
+.input--large {
+  padding: 1rem 1.25rem;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  min-height: 3.5rem;
+}
+
+/* Variant Styles */
+.input--default {
+  /* Default styles already applied above */
+}
+
+.input--filled {
+  background-color: hsl(var(--color-muted));
+  border-color: transparent;
+}
+
+.input--filled:focus {
+  background-color: hsl(var(--color-background));
+  border-color: hsl(var(--color-ring));
+}
+
+.input--outlined {
+  background-color: transparent;
+  border-width: 2px;
+}
+
+/* State Variants */
+.input--error {
+  border-color: hsl(var(--color-destructive));
+  color: hsl(var(--color-destructive));
+}
+
+.input--error:focus {
+  border-color: hsl(var(--color-destructive));
+  box-shadow: 0 0 0 3px hsla(var(--color-destructive), 0.2);
+}
+
+.input--success {
+  border-color: hsl(142, 71%, 45%);
+}
+
+.input--success:focus {
+  border-color: hsl(142, 71%, 45%);
+  box-shadow: 0 0 0 3px hsla(142, 71%, 45%, 0.2);
+}
+
+.input--disabled {
+  background-color: hsl(var(--color-muted));
+  color: hsl(var(--color-muted-foreground));
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.input--focused {
+  /* Focus styles already handled above */
+}
+
+.input--fullWidth {
+  width: 100%;
+}
+
+/* Icon Styles */
+.inputIconLeft,
+.inputIconRight {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: hsl(var(--color-muted-foreground));
+  pointer-events: none;
+}
+
+.inputIconLeft {
+  left: 1rem;
+}
+
+.input--small .inputIconLeft {
+  left: 0.75rem;
+}
+
+.input--large .inputIconLeft {
+  left: 1.25rem;
+}
+
+.inputIconRight {
+  right: 1rem;
+}
+
+.input--small .inputIconRight {
+  right: 0.75rem;
+}
+
+.input--large .inputIconRight {
+  right: 1.25rem;
+}
+
+.inputIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Password Toggle */
+.passwordToggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  color: hsl(var(--color-muted-foreground));
+  transition: all var(--transition-speed) ease;
+  pointer-events: auto;
+}
+
+.passwordToggle:hover {
+  color: hsl(var(--color-foreground));
+  background-color: hsla(var(--color-foreground), 0.1);
+}
+
+/* Input Padding Adjustments for Icons */
+.inputIconLeft + .input {
+  padding-left: 3rem;
+}
+
+.input--small.inputIconLeft + .input {
+  padding-left: 2.5rem;
+}
+
+.input--large.inputIconLeft + .input {
+  padding-left: 3.5rem;
+}
+
+.input.inputIconRight {
+  padding-right: 3rem;
+}
+
+.input--small.inputIconRight {
+  padding-right: 2.5rem;
+}
+
+.input--large.inputIconRight {
+  padding-right: 3.5rem;
+}
+
+/* Feedback Styles */
+.feedback {
+  min-height: 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: hsl(var(--color-destructive));
+}
+
+.success {
+  color: hsl(142, 71%, 45%);
+}
+
+.helperText {
+  color: hsl(var(--color-muted-foreground));
+}
+
+.feedbackIcon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+/* Dark Theme Adjustments */
+[data-theme='dark'] .input {
+  border-color: hsl(var(--color-input));
+}
+
+[data-theme='dark'] .input--filled {
+  background-color: hsl(var(--color-muted));
+}
+
+[data-theme='dark'] .input--filled:focus {
+  background-color: hsl(var(--color-background));
+}
+
+[data-theme='dark'] .input--disabled {
+  background-color: hsl(var(--color-muted));
+  color: hsl(var(--color-muted-foreground));
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .input,
+  .passwordToggle {
+    transition: none;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .input {
+    border: 1px solid #000;
+    background: #fff;
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+  }
+  
+  .input:focus {
+    box-shadow: none;
+  }
+}

@@ -1,24 +1,22 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import Navbar from './components/Layout/Navbar/Navbar';
-import Footer from './components/Layout/Footer/Footer';
+import Navbar from './Navbar/Navbar';
+import Footer from './Footer/Footer';
 
 /**
- * App Component
- * Main application wrapper for /unauthenticated routes with footer
+ * Authenticated Layout Wrapper
+ * Provides consistent layout for authenticated users with navbar and footer
  */
-function App() {
+const LayoutWrapper = () => {
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900">
       <Navbar />
-      
       <main className="flex-grow">
         <Outlet />
       </main>
-      
       <Footer />
     </div>
   );
-}
+};
 
-export default App;
+export default LayoutWrapper;

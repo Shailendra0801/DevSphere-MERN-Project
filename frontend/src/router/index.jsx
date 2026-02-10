@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../App';
+import LayoutWrapper from '../components/Layout/LayoutWrapper';
 import { ProtectedRoute, GuestRoute } from '../components/Routing/ProtectedRoute';
 
 // Import page components
@@ -20,7 +21,7 @@ import Unauthorized from '../pages/Unauthorized/Unauthorized';
 export const routes = [
   {
     path: '/',
-    element: <App />,
+    element: <App />, // Public layout with Navbar and Footer
     children: [
       // Public routes
       {
@@ -43,7 +44,20 @@ export const routes = [
           </GuestRoute>
         ),
       },
-      
+      {
+        path: 'unauthorized',
+        element: <Unauthorized />,
+      },
+      {
+        path: '*',
+        element: <NotFound />,
+      },
+    ],
+  },
+  {
+    path: '/', // Authenticated layout with Navbar and Footer
+    element: <LayoutWrapper />,
+    children: [
       // Protected routes
       {
         path: 'dashboard',
@@ -68,16 +82,6 @@ export const routes = [
             <Settings />
           </ProtectedRoute>
         ),
-      },
-      
-      // Error routes
-      {
-        path: 'unauthorized',
-        element: <Unauthorized />,
-      },
-      {
-        path: '*',
-        element: <NotFound />,
       },
     ],
   },

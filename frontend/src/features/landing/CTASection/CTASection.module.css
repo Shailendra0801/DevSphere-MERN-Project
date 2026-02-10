@@ -1,0 +1,241 @@
+/* CTA Section Styles - Scoped to this component only */
+
+.ctaSection {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  background: linear-gradient(135deg, hsl(217, 91%, 60%) 0%, hsl(270, 91%, 60%) 50%, hsl(217, 91%, 70%) 100%);
+  position: relative;
+  overflow: hidden;
+  color: white;
+}
+
+@media (min-width: 768px) {
+  .ctaSection {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+}
+
+/* Background Decorations */
+.backgroundDecoration1 {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 70%, hsla(0, 0%, 100%, 0.1) 0%, transparent 50%);
+}
+
+.backgroundDecoration2 {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 70% 30%, hsla(0, 0%, 100%, 0.05) 0%, transparent 50%);
+}
+
+.container {
+  position: relative;
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+.content {
+  text-align: center;
+}
+
+/* Icon Wrapper */
+.iconWrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 5rem;
+  height: 5rem;
+  background-color: hsla(0, 0%, 100%, 0.1);
+  backdrop-filter: blur(0.5rem);
+  border-radius: 50%;
+  margin-bottom: 2rem;
+}
+
+.rocketIcon {
+  height: 2.5rem;
+  width: 2.5rem;
+  color: white;
+}
+
+/* Title */
+.title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: white;
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: 3rem;
+  }
+}
+
+/* Description */
+.description {
+  font-size: 1.25rem;
+  color: hsla(0, 0%, 100%, 0.9);
+  margin-bottom: 3rem;
+  max-width: 42rem;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.75;
+}
+
+/* Buttons Container */
+.buttonsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+@media (min-width: 640px) {
+  .buttonsContainer {
+    flex-direction: row;
+  }
+}
+
+/* Primary Button */
+.primaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  background-color: white;
+  color: hsl(217, 91%, 60%);
+  font-weight: 600;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  text-decoration: none;
+  font-size: 1.125rem;
+}
+
+.primaryButton:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: translateY(-0.25rem);
+}
+
+.buttonIcon {
+  margin-left: 0.5rem;
+  height: 1.25rem;
+  width: 1.25rem;
+  transition: transform 0.2s ease;
+}
+
+.primaryButton:hover .buttonIcon {
+  transform: translateX(0.25rem);
+}
+
+/* Secondary Button */
+.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  background-color: hsla(0, 0%, 100%, 0.1);
+  backdrop-filter: blur(0.5rem);
+  color: white;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  border: 1px solid hsla(0, 0%, 100%, 0.2);
+  transition: all 0.2s ease;
+  text-decoration: none;
+  font-size: 1.125rem;
+}
+
+.secondaryButton:hover {
+  background-color: hsla(0, 0%, 100%, 0.2);
+}
+
+/* Trust Indicators */
+.trustIndicators {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  color: hsla(0, 0%, 100%, 0.9);
+}
+
+/* Trust Item */
+.trustItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sparkleIcon {
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 640px) {
+  .title {
+    font-size: 1.5rem;
+  }
+  
+  .description {
+    font-size: 1.125rem;
+  }
+  
+  .trustIndicators {
+    gap: 1rem;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .primaryButton,
+  .secondaryButton {
+    font-size: 1rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .primaryButton,
+  .secondaryButton {
+    transition: none;
+  }
+  
+  .primaryButton:hover,
+  .secondaryButton:hover {
+    transform: none;
+  }
+  
+  .buttonIcon {
+    transition: none;
+  }
+  
+  .primaryButton:hover .buttonIcon {
+    transform: none;
+  }
+}

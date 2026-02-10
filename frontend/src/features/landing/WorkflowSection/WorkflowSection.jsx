@@ -1,5 +1,6 @@
 import React from 'react';
 import { CheckCircle, ArrowRight, Users, Search, Zap, Trophy } from 'lucide-react';
+import styles from './WorkflowSection.module.css';
 
 /**
  * Workflow Section Component
@@ -34,55 +35,55 @@ const WorkflowSection = () => {
   ];
 
   return (
-    <section id="workflow" className="py-20 bg-gray-50 dark:bg-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="workflow" className={styles.workflowSection}>
+      <div className={styles.container}>
         {/* Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            How <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">DevSphere</span> Works
+        <div className={styles.header}>
+          <h2 className={styles.title}>
+            How <span className={styles.highlightedText}>DevSphere</span> Works
           </h2>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <p className={styles.subtitle}>
             Get from idea to winning project in four simple steps
           </p>
         </div>
 
         {/* Workflow Steps */}
-        <div className="relative">
+        <div className={styles.workflowContainer}>
           {/* Connecting Lines */}
-          <div className="hidden md:block absolute top-24 left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-gradient-to-b from-blue-500 to-purple-500"></div>
+          <div className={styles.connectingLine}></div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className={styles.stepsGrid}>
             {steps.map((step, index) => {
               const IconComponent = step.icon;
               return (
                 <div 
                   key={index}
-                  className="relative group"
+                  className={styles.stepContainer}
                 >
                   {/* Step Number */}
-                  <div className="relative z-10 flex flex-col items-center">
-                    <div className={`w-16 h-16 rounded-full bg-gradient-to-r from-${step.color}-500 to-${step.color}-600 flex items-center justify-center text-white font-bold text-xl mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                  <div className={styles.stepNumberWrapper}>
+                    <div className={styles.stepNumber}>
                       {index + 1}
                     </div>
                     
                     {/* Icon */}
-                    <div className={`p-4 rounded-full bg-white dark:bg-gray-700 shadow-lg mb-4 group-hover:shadow-xl transition-shadow`}>
-                      <IconComponent className={`h-8 w-8 text-${step.color}-600 dark:text-${step.color}-400`} />
+                    <div className={styles.stepIconWrapper}>
+                      <IconComponent className={styles.stepIcon} />
                     </div>
                     
                     {/* Content */}
-                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3 text-center">
+                    <h3 className={styles.stepTitle}>
                       {step.title}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400 text-center">
+                    <p className={styles.stepDescription}>
                       {step.description}
                     </p>
                   </div>
                   
                   {/* Arrow for desktop */}
                   {index < steps.length - 1 && (
-                    <div className="hidden lg:block absolute top-8 -right-4 z-0">
-                      <ArrowRight className="h-6 w-6 text-gray-400 dark:text-gray-500" />
+                    <div className={styles.arrowIcon}>
+                      <ArrowRight className={styles.arrowSvg} />
                     </div>
                   )}
                 </div>
@@ -92,12 +93,12 @@ const WorkflowSection = () => {
         </div>
 
         {/* Benefits List */}
-        <div className="mt-20 bg-white dark:bg-gray-700 rounded-2xl p-8 md:p-12 shadow-xl">
-          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+        <div className={styles.benefitsCard}>
+          <h3 className={styles.benefitsTitle}>
             Why Developers Love DevSphere
           </h3>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className={styles.benefitsGrid}>
             {[
               "AI-powered team matching saves hours of manual searching",
               "Built-in collaboration tools eliminate tool-hopping",
@@ -106,9 +107,9 @@ const WorkflowSection = () => {
               "Community support from experienced developers",
               "Career opportunities through successful projects"
             ].map((benefit, index) => (
-              <div key={index} className="flex items-start space-x-3">
-                <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-700 dark:text-gray-300">{benefit}</span>
+              <div key={index} className={styles.benefitItem}>
+                <CheckCircle className={styles.checkIcon} />
+                <span className={styles.benefitText}>{benefit}</span>
               </div>
             ))}
           </div>
