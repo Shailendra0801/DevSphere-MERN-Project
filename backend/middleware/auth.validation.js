@@ -1,10 +1,15 @@
 /**
- * Authentication Validation Middleware
- * Validates request bodies for auth-related endpoints
+ * Authentication Validation Middleware (DEBUG VERSION)
+ * Logs request bodies + validation failures
  */
 
-const { body, validationResult } = require('express-validator');
-const { ApiError } = require('./errorHandler');
+const { body, validationResult } = require("express-validator");
+const { ApiError } = require("./errorHandler");
+
+// =======================
+// GLOBAL TOGGLE (set false later)
+// =======================
+const DEBUG_VALIDATION = true;
 
 /**
  * Handle validation errors
@@ -12,180 +17,216 @@ const { ApiError } = require('./errorHandler');
  */
 const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
-  
-  if (!errors.isEmpty()) {
-    const formattedErrors = errors.array().map(error => ({
-      field: error.param,
-      message: error.msg
-    }));
-    
-    return next(new ApiError(400, 'Validation failed', formattedErrors));
+
+  if (DEBUG_VALIDATION) {
+    console.log("\n================ VALIDATION DEBUG =================");
+    console.log("REQUEST BODY:");
+    console.dir(req.body, { depth: null });
+
+    console.log("\nRAW VALIDATION ERRORS:");
+    console.dir(errors.array(), { depth: null });
+    console.log("=================================================\n");
   }
-  
+
+  if (!errors.isEmpty()) {
+    const formattedErrors = errors.array().map((error) => ({
+      field: error.param,
+      message: error.msg,
+      value: error.value,
+      location: error.location,
+    }));
+
+    return next(new ApiError(400, "Validation failed", formattedErrors));
+  }
+
   next();
 };
 
-/**
- * Registration validation rules
- * Validates user registration input
- */
+// =======================
+// COMMON PASSWORD REGEX
+// =======================
+const STRONG_PASSWORD_REGEX =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/;
+
+// =======================
+// REGISTRATION VALIDATION
+// =======================
 const validateRegistration = [
-  body('name')
+  body("name")
     .trim()
     .isLength({ min: 2, max: 50 })
-    .withMessage('Name must be between 2 and 50 characters')
+    .withMessage("Name must be between 2 and 50 characters")
     .matches(/^[a-zA-Z\s]+$/)
-    .withMessage('Name can only contain letters and spaces'),
-  
-  body('email')
+    .withMessage("Name can only contain letters and spaces"),
+
+  body("email")
     .isEmail()
-    .normalizeEmail()
-    .withMessage('Please provide a valid email address')
-    .toLowerCase(),
-  
-  body('password')
+    .withMessage("Please provide a valid email address")
+    .normalizeEmail(),
+
+  body("password")
+    .trim()
     .isLength({ min: 8 })
-    .withMessage('Password must be at least 8 characters long')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
-    .withMessage('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'),
-  
-  body('confirmPassword')
+    .withMessage("Password must be at least 8 characters long")
+    .matches(STRONG_PASSWORD_REGEX)
+    .withMessage(
+      "Password must contain at least one uppercase letter, one lowercase letter, one number, and one symbol"
+    ),
+
+  body("confirmPassword")
+    .trim()
+    .notEmpty()
+    .withMessage("Confirm password is required")
     .custom((value, { req }) => {
+      if (DEBUG_VALIDATION) {
+        console.log("\nCONFIRM PASSWORD CHECK:");
+        console.log("password:", req.body.password);
+        console.log("confirmPassword:", value);
+      }
+
       if (value !== req.body.password) {
-        throw new Error('Passwords do not match');
+        throw new Error("Passwords do not match");
       }
       return true;
     }),
-  
-  handleValidationErrors
+
+  handleValidationErrors,
 ];
 
-/**
- * Login validation rules
- * Validates user login input
- */
+// =================
+// LOGIN VALIDATION
+// =================
 const validateLogin = [
-  body('email')
+  body("email")
     .isEmail()
-    .normalizeEmail()
-    .withMessage('Please provide a valid email address')
-    .toLowerCase(),
-  
-  body('password')
-    .notEmpty()
-    .withMessage('Password is required'),
-  
-  body('rememberMe')
+    .withMessage("Please provide a valid email address")
+    .normalizeEmail(),
+
+  body("password").notEmpty().withMessage("Password is required"),
+
+  body("rememberMe")
     .optional()
     .isBoolean()
-    .withMessage('Remember me must be a boolean value'),
-  
-  handleValidationErrors
+    .withMessage("Remember me must be a boolean value"),
+
+  handleValidationErrors,
 ];
 
-/**
- * Password reset request validation
- * Validates password reset request input
- */
+// ============================
+// PASSWORD RESET REQUEST
+// ============================
 const validatePasswordResetRequest = [
-  body('email')
+  body("email")
     .isEmail()
-    .normalizeEmail()
-    .withMessage('Please provide a valid email address')
-    .toLowerCase(),
-  
-  handleValidationErrors
+    .withMessage("Please provide a valid email address")
+    .normalizeEmail(),
+
+  handleValidationErrors,
 ];
 
-/**
- * Password reset validation
- * Validates password reset input
- */
+// =====================
+// PASSWORD RESET
+// =====================
 const validatePasswordReset = [
-  body('token')
-    .notEmpty()
-    .withMessage('Reset token is required'),
-  
-  body('password')
+  body("token").notEmpty().withMessage("Reset token is required"),
+
+  body("password")
+    .trim()
     .isLength({ min: 8 })
-    .withMessage('Password must be at least 8 characters long')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
-    .withMessage('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'),
-  
-  body('confirmPassword')
+    .withMessage("Password must be at least 8 characters long")
+    .matches(STRONG_PASSWORD_REGEX)
+    .withMessage(
+      "Password must contain at least one uppercase letter, one lowercase letter, one number, and one symbol"
+    ),
+
+  body("confirmPassword")
+    .trim()
+    .notEmpty()
+    .withMessage("Confirm password is required")
     .custom((value, { req }) => {
+      if (DEBUG_VALIDATION) {
+        console.log("\nRESET CONFIRM CHECK:");
+        console.log("password:", req.body.password);
+        console.log("confirmPassword:", value);
+      }
+
       if (value !== req.body.password) {
-        throw new Error('Passwords do not match');
+        throw new Error("Passwords do not match");
       }
       return true;
     }),
-  
-  handleValidationErrors
+
+  handleValidationErrors,
 ];
 
-/**
- * Password update validation
- * Validates password update input
- */
+// =====================
+// PASSWORD UPDATE
+// =====================
 const validatePasswordUpdate = [
-  body('currentPassword')
+  body("currentPassword")
     .notEmpty()
-    .withMessage('Current password is required'),
-  
-  body('newPassword')
+    .withMessage("Current password is required"),
+
+  body("newPassword")
+    .trim()
     .isLength({ min: 8 })
-    .withMessage('New password must be at least 8 characters long')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
-    .withMessage('New password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'),
-  
-  body('confirmNewPassword')
+    .withMessage("New password must be at least 8 characters long")
+    .matches(STRONG_PASSWORD_REGEX)
+    .withMessage(
+      "New password must contain at least one uppercase letter, one lowercase letter, one number, and one symbol"
+    ),
+
+  body("confirmNewPassword")
+    .trim()
+    .notEmpty()
+    .withMessage("Confirm new password is required")
     .custom((value, { req }) => {
+      if (DEBUG_VALIDATION) {
+        console.log("\nUPDATE CONFIRM CHECK:");
+        console.log("newPassword:", req.body.newPassword);
+        console.log("confirmNewPassword:", value);
+      }
+
       if (value !== req.body.newPassword) {
-        throw new Error('New passwords do not match');
+        throw new Error("New passwords do not match");
       }
       return true;
     }),
-  
-  handleValidationErrors
+
+  handleValidationErrors,
 ];
 
-/**
- * Email verification validation
- * Validates email verification input
- */
+// ========================
+// EMAIL VERIFICATION
+// ========================
 const validateEmailVerification = [
-  body('token')
-    .notEmpty()
-    .withMessage('Verification token is required'),
-  
-  handleValidationErrors
+  body("token").notEmpty().withMessage("Verification token is required"),
+
+  handleValidationErrors,
 ];
 
-/**
- * Resend verification validation
- * Validates resend verification input
- */
+// ========================
+// RESEND VERIFICATION
+// ========================
 const validateResendVerification = [
-  body('email')
+  body("email")
     .isEmail()
-    .normalizeEmail()
-    .withMessage('Please provide a valid email address')
-    .toLowerCase(),
-  
-  handleValidationErrors
+    .withMessage("Please provide a valid email address")
+    .normalizeEmail(),
+
+  handleValidationErrors,
 ];
 
-/**
- * Refresh token validation
- * Validates refresh token input
- */
+// =====================
+// REFRESH TOKEN
+// =====================
 const validateRefreshToken = [
-  body('refreshToken')
+  body("refreshToken")
     .optional()
     .isString()
-    .withMessage('Refresh token must be a string'),
-  
-  handleValidationErrors
+    .withMessage("Refresh token must be a string"),
+
+  handleValidationErrors,
 ];
 
 module.exports = {
@@ -197,5 +238,5 @@ module.exports = {
   validateEmailVerification,
   validateResendVerification,
   validateRefreshToken,
-  handleValidationErrors
+  handleValidationErrors,
 };

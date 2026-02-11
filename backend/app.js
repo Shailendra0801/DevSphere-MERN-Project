@@ -31,16 +31,18 @@ const app = express();
 // Security middleware
 app.use(helmet());
 app.use(securityHeaders);
-app.use(genericLimiter);
 
-// Enable CORS with options
+// Enable CORS with options (MUST be before rate limiting)
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
     ? process.env.FRONTEND_URL 
-    : ['http://localhost:3000', 'http://127.0.0.1:3000'],
+    : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5173', 'http://localhost:5174'],
   credentials: true,
   optionsSuccessStatus: 200
 }));
+
+// Rate limiting (after CORS to allow preflight requests)
+app.use(genericLimiter);
 
 // Built-in middleware
 app.use(cookieParser());                    // Parse cookies

@@ -1,132 +1,225 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Mail, Lock, User, ArrowRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, Lock, User, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import authService from '../../services/auth.service';
 import './auth.css';
 
 /**
  * Register Page Component
- * Simple registration form for new users
+ * Functional registration form with validation and floating labels
  */
 const Register = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    // Validation
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      setLoading(false);
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      setLoading(false);
+      return;
+    }
+
+    if (!agreeToTerms) {
+      setError('Please agree to the Terms of Service and Privacy Policy');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await authService.register(name, email, password, confirmPassword);
+      console.log('Registration successful:', response.data);
+      // Redirect to dashboard
+      navigate('/dashboard');
+    } catch (err) {
+      console.error('Registration error:', err);
+      setError(err.message || 'Registration failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
           {/* Header */}
-          <div className="text-center mb-8">
+          <div>
             <div className="auth-logo register-logo-gradient">
               <User className="h-8 w-8 text-white" />
             </div>
-            <h1 className="auth-title">
-              Create Account
-            </h1>
+            <h1 className="auth-title">Create Account</h1>
             <p className="auth-subtitle">
               Join DevSphere and start building amazing projects
             </p>
           </div>
-          
+
+          {/* Error Message */}
+          {error && (
+            <div className="error-message">
+              {error}
+            </div>
+          )}
+
           {/* Form */}
-          <form className="auth-form space-y-6">
+          <form onSubmit={handleSubmit} className="auth-form">
+            {/* Full Name Input */}
             <div className="auth-input-group">
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Full Name
-              </label>
-              <div className="input-with-icon relative">
-                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <div className="auth-input-wrapper">
+                <User className="input-icon h-5 w-5" />
                 <input
                   type="text"
                   id="name"
-                  className="auth-input w-full pl-10 pr-4 py-3"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="auth-input"
                   placeholder="John Doe"
                   required
                 />
+                <label htmlFor="name" className="floating-label">
+                  Full Name
+                </label>
               </div>
             </div>
-            
+
+            {/* Email Input */}
             <div className="auth-input-group">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Email Address
-              </label>
-              <div className="input-with-icon relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <div className="auth-input-wrapper">
+                <Mail className="input-icon h-5 w-5" />
                 <input
                   type="email"
                   id="email"
-                  className="auth-input w-full pl-10 pr-4 py-3"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="auth-input"
                   placeholder="you@example.com"
                   required
                 />
+                <label htmlFor="email" className="floating-label">
+                  Email Address
+                </label>
               </div>
             </div>
-            
+
+            {/* Password Input */}
             <div className="auth-input-group">
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Password
-              </label>
-              <div className="input-with-icon relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <div className="auth-input-wrapper">
+                <Lock className="input-icon h-5 w-5" />
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   id="password"
-                  className="auth-input w-full pl-10 pr-4 py-3"
-                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="auth-input"
+                  placeholder="password"
                   required
                 />
+                <label htmlFor="password" className="floating-label">
+                  Password
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="password-toggle-btn"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
               </div>
             </div>
-            
-            <div className="auth-input-group confirm-password-input">
-              <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Confirm Password
-              </label>
-              <div className="input-with-icon relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+
+            {/* Confirm Password Input */}
+            <div className="auth-input-group">
+              <div className="auth-input-wrapper">
+                <Lock className="input-icon h-5 w-5" />
                 <input
-                  type="password"
+                  type={showConfirmPassword ? 'text' : 'password'}
                   id="confirm-password"
-                  className="auth-input w-full pl-10 pr-4 py-3"
-                  placeholder="••••••••"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="auth-input"
+                  placeholder="password"
                   required
                 />
+                <label htmlFor="confirm-password" className="floating-label">
+                  Confirm Password
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="password-toggle-btn"
+                  aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
               </div>
             </div>
-            
-            <div className="flex items-center">
+
+            {/* Terms and Conditions */}
+            <div className="terms-wrapper">
               <input
                 id="terms"
                 type="checkbox"
-                className="remember-checkbox h-4 w-4"
+                checked={agreeToTerms}
+                onChange={(e) => setAgreeToTerms(e.target.checked)}
+                className="terms-checkbox"
                 required
               />
-              <label htmlFor="terms" className="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+              <label htmlFor="terms" className="terms-label">
                 I agree to the{' '}
-                <Link to="/terms" className="text-blue-600 hover:text-blue-500 dark:text-blue-400">
+                <Link to="/terms" className="terms-link">
                   Terms of Service
                 </Link>{' '}
                 and{' '}
-                <Link to="/privacy" className="text-blue-600 hover:text-blue-500 dark:text-blue-400">
+                <Link to="/privacy" className="terms-link">
                   Privacy Policy
                 </Link>
               </label>
             </div>
-            
+
+            {/* Submit Button */}
             <button
               type="submit"
+              disabled={loading}
               className="submit-button"
             >
-              Create Account
-              <ArrowRight className="submit-button-icon ml-2 h-5 w-5" />
+              {loading ? (
+                <div className="submit-button-content">
+                  <span className="spinner"></span>
+                  <span>Creating Account...</span>
+                </div>
+              ) : (
+                <div className="submit-button-content">
+                  <span>Create Account</span>
+                  <ArrowRight className="h-5 w-5" />
+                </div>
+              )}
             </button>
           </form>
-          
+
           {/* Footer */}
-          <div className="mt-6 text-center">
-            <p className="text-gray-600 dark:text-gray-400">
+          <div className="auth-footer">
+            <p>
               Already have an account?{' '}
-              <Link 
-                to="/login" 
-                className="font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
-              >
+              <Link to="/login" className="auth-footer-link">
                 Sign in
               </Link>
             </p>

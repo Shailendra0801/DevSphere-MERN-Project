@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../../hooks/useTheme';
+import { useAuth } from '../../../hooks/useAuth';
 import { User, Settings, LogOut, ChevronDown, Code, Sun, Moon, Menu, X } from 'lucide-react';
 import styles from './Navbar.module.css';
 
@@ -11,6 +12,7 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
+  const { isAuthenticated, user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,17 +32,14 @@ const Navbar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isUserMenuOpen]);
 
-  const isAuthenticated = !!localStorage.getItem('auth_token');
-  const user = {
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    avatar: 'https://via.placeholder.com/40'
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('refresh_token');
-    navigate('/login');
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+      navigate('/login');
+    }
   };
 
   const navItems = [
@@ -122,14 +121,14 @@ const Navbar = () => {
                     <div className={styles.userAvatarWrapper}>
                       <img
                         className={styles.userAvatar}
-                        src={user.avatar}
-                        alt={user.name}
+                        src={user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'User')}&background=random`}
+                        alt={user?.name || 'User'}
                       />
                       <div className={styles.onlineIndicator}></div>
                     </div>
                     <div className={styles.userInfo}>
-                      <p className={styles.userName}>{user.name}</p>
-                      <p className={styles.userEmail}>{user.email}</p>
+                      <p className={styles.userName}>{user?.name || 'User'}</p>
+                      <p className={styles.userEmail}>{user?.email || 'user@example.com'}</p>
                     </div>
                     <ChevronDown 
                       className={`${styles.chevron} ${isUserMenuOpen ? styles.rotated : ''}`}
@@ -139,8 +138,8 @@ const Navbar = () => {
                   {isUserMenuOpen && (
                     <div className={styles.userDropdown}>
                       <div className={styles.dropdownHeader}>
-                        <p className={styles.dropdownUserName}>{user.name}</p>
-                        <p className={styles.dropdownUserEmail}>{user.email}</p>
+                        <p className={styles.dropdownUserName}>{user?.name || 'User'}</p>
+                        <p className={styles.dropdownUserEmail}>{user?.email || 'user@example.com'}</p>
                       </div>
                       <div className={styles.dropdownMenu}>
                         <Link
@@ -201,10 +200,14 @@ const Navbar = () => {
             {isAuthenticated && (
               <div className={styles.mobileUserInfo}>
                 <div className={styles.mobileUserContent}>
-                  <img className={styles.mobileUserAvatar} src={user.avatar} alt={user.name} />
+                  <img 
+                    className={styles.mobileUserAvatar} 
+                    src={user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'User')}&background=random`} 
+                    alt={user?.name || 'User'} 
+                  />
                   <div>
-                    <p className={styles.mobileUserName}>{user.name}</p>
-                    <p className={styles.mobileUserEmail}>{user.email}</p>
+                    <p className={styles.mobileUserName}>{user?.name || 'User'}</p>
+                    <p className={styles.mobileUserEmail}>{user?.email || 'user@example.com'}</p>
                   </div>
                 </div>
               </div>

@@ -25,6 +25,8 @@ apiClient.interceptors.request.use(
     // Log request in development
     if (config.ENABLE_LOGGING) {
       console.log(`[API Request] ${requestConfig.method?.toUpperCase()} ${requestConfig.url}`, {
+        baseURL: requestConfig.baseURL,
+        url: requestConfig.url,
         headers: requestConfig.headers,
         data: requestConfig.data,
       });
@@ -61,6 +63,10 @@ apiClient.interceptors.response.use(
         status: error.response?.status,
         message: error.message,
         data: error.response?.data,
+        config: {
+          baseURL: originalRequest?.baseURL,
+          url: originalRequest?.url,
+        }
       });
     }
     

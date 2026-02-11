@@ -234,12 +234,21 @@ exports.refreshToken = asyncHandler(async (req, res, next) => {
  * @access  Private
  */
 exports.getMe = asyncHandler(async (req, res, next) => {
+  console.log('GET /me called with user ID:', req.user.id);
   const user = await User.findById(req.user.id);
+  
+  if (!user) {
+    console.log('User not found for ID:', req.user.id);
+    return next(new ApiError(404, 'User not found'));
+  }
+  
+  const userProfile = user.getPublicProfile();
+  console.log('Returning user profile:', userProfile);
   
   res.status(200).json({
     status: 'success',
     data: {
-      user: user.getPublicProfile()
+      user: userProfile
     }
   });
 });
