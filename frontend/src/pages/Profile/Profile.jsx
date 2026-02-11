@@ -1,9 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
+import EditProfileModal from '../../components/Profile/EditProfileModal/EditProfileModal';
 import './profile.css';
 
 const Profile = () => {
   const { user, loading, isAuthenticated, refreshUser } = useAuth();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [updateSuccess, setUpdateSuccess] = useState(false);
   
   useEffect(() => {
     // If user is authenticated but no user data, try to refresh
@@ -11,6 +14,14 @@ const Profile = () => {
       refreshUser().catch(console.error);
     }
   }, [user, loading, isAuthenticated, refreshUser]);
+
+  // Handle profile update success
+  const handleProfileUpdate = (updatedUser) => {
+    console.log('Profile updated successfully:', updatedUser);
+    setUpdateSuccess(true);
+    // Clear success message after 3 seconds
+    setTimeout(() => setUpdateSuccess(false), 3000);
+  };
   
   if (loading) {
     return (
@@ -95,15 +106,34 @@ const Profile = () => {
           </div>
           
           <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 mt-6">
-            <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Profile Actions</h2>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-gray-800 dark:text-white">Profile Actions</h2>
+              {updateSuccess && (
+                <div className="px-3 py-1 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 rounded-full text-sm">
+                  Profile updated successfully!
+                </div>
+              )}
+            </div>
             <div className="flex flex-wrap gap-3">
-              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              <button 
+                onClick={() => setIsEditModalOpen(true)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                </svg>
                 Edit Profile
               </button>
-              <button className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+              <button className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                </svg>
                 Change Password
               </button>
-              <button className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+              <button className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                </svg>
                 Update Avatar
               </button>
               <button 
@@ -116,14 +146,25 @@ const Profile = () => {
                     console.error('Failed to refresh user data:', error);
                   }
                 }}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
               >
-                Refresh User Data
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
+                </svg>
+                Refresh Data
               </button>
             </div>
           </div>
         </div>
       </div>
+      
+      {/* Edit Profile Modal */}
+      <EditProfileModal 
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        user={user}
+        onUpdate={handleProfileUpdate}
+      />
     </div>
   );
 };

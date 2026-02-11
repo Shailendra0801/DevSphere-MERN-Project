@@ -8,6 +8,9 @@ const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  // Retry configuration
+  retry: config.API_RETRY_ATTEMPTS,
+  retryDelay: config.API_RETRY_DELAY,
 });
 
 // Request interceptor
@@ -57,6 +60,24 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     
+    // Implement retry logic for network errors
+    if (!error.response && originalRequest.retryCount < (originalRequest.retry || config.API_RETRY_ATTEMPTS)) {
+      originalRequest.retryCount = originalRequest.retryCount || 0;
+      originalRequest.retryCount++;
+      
+      const delay = originalRequest.retryDelay || config.API_RETRY_DELAY;
+      
+      if (config.ENABLE_LOGGING) {
+        console.log(`Retrying request (${originalRequest.retryCount}/${originalRequest.retry || config.API_RETRY_ATTEMPTS}) in ${delay}ms`);
+      }
+      
+      // Wait before retry
+      await new Promise(resolve => setTimeout(resolve, delay));
+      
+      // Retry the request
+      return apiClient(originalRequest);
+    }
+    
     // Log error response
     if (config.ENABLE_LOGGING) {
       console.error(`[API Error] ${originalRequest?.method?.toUpperCase()} ${originalRequest?.url}`, {
@@ -75,10 +96,15 @@ apiClient.interceptors.response.use(
       originalRequest._retry = true;
       
       try {
+        // Check if we're already trying to refresh
+        if (originalRequest.url?.includes('/refresh-token')) {
+          throw new Error('Refresh token failed');
+        }
+        
         // Attempt to refresh token
         const refreshToken = localStorage.getItem(config.REFRESH_TOKEN_KEY);
         if (refreshToken) {
-          const refreshResponse = await axios.post(`${config.BACKEND_URL}/api/v1/auth/refresh-token`, {
+          const refreshResponse = await axios.post(`${config.API_BASE_URL}/api/v1/auth/refresh-token`, {
             refreshToken,
           });
           
@@ -86,29 +112,43 @@ apiClient.interceptors.response.use(
             // Store new token
             localStorage.setItem(config.TOKEN_KEY, refreshResponse.data.accessToken);
             
-            // Retry original request with new token
+            // Update Authorization header
             originalRequest.headers.Authorization = `Bearer ${refreshResponse.data.accessToken}`;
+            
+            // Retry original request with new token
             return apiClient(originalRequest);
           }
         }
       } catch (refreshError) {
-        // Refresh failed, redirect to login
+        console.error('Token refresh failed:', refreshError);
+        
+        // Clear all auth tokens
         localStorage.removeItem(config.TOKEN_KEY);
         localStorage.removeItem(config.REFRESH_TOKEN_KEY);
-        window.location.href = '/login';
-        return Promise.reject(refreshError);
+        localStorage.removeItem('user');
+        
+        // Redirect to login only if not already on login page
+        if (window.location.pathname !== '/login') {
+          window.location.href = '/login';
+        }
+        
+        return Promise.reject(new Error('Session expired. Please log in again.'));
       }
     }
     
     // Handle 403 Forbidden
     if (error.response?.status === 403) {
-      // Show permission denied message
       console.warn('Access forbidden - insufficient permissions');
     }
     
     // Handle 500 Internal Server Error
-    if (error.response?.status === 500) {
+    if (error.response?.status >= 500) {
       console.error('Server error occurred');
+    }
+    
+    // Handle network errors
+    if (!error.response) {
+      console.error('Network error - check your connection');
     }
     
     return Promise.reject(error);

@@ -15,6 +15,7 @@ const Input = forwardRef(({
   size = 'medium',
   leftIcon: LeftIcon,
   rightIcon: RightIcon,
+  onRightIconClick,
   className = '',
   ...props
 }, ref) => {
@@ -94,7 +95,14 @@ const Input = forwardRef(({
                 )}
               </button>
             ) : (
-              <RightIcon className={styles.inputIcon} />
+              <button
+                type="button"
+                className={styles.passwordToggle}
+                onClick={onRightIconClick}
+                aria-label="Toggle icon action"
+              >
+                <RightIcon className={styles.inputIcon} />
+              </button>
             )}
           </div>
         )}
@@ -141,7 +149,8 @@ Input.propTypes = {
   required: PropTypes.bool,
   className: PropTypes.string,
   onFocus: PropTypes.func,
-  onBlur: PropTypes.func
+  onBlur: PropTypes.func,
+  onRightIconClick: PropTypes.func
 };
 
 export default Input;

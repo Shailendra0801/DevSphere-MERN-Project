@@ -33,13 +33,23 @@ app.use(helmet());
 app.use(securityHeaders);
 
 // Enable CORS with options (MUST be before rate limiting)
-app.use(cors({
+const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
-    ? process.env.FRONTEND_URL 
-    : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5173', 'http://localhost:5174'],
+    ? process.env.FRONTEND_URL || 'https://yourdomain.com'
+    : [
+        'http://localhost:3000', 
+        'http://127.0.0.1:3000', 
+        'http://localhost:5173', 
+        'http://localhost:5174',
+        'http://localhost:4173' // Vite preview
+      ],
   credentials: true,
-  optionsSuccessStatus: 200
-}));
+  optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
+};
+
+app.use(cors(corsOptions));
 
 // Rate limiting (after CORS to allow preflight requests)
 app.use(genericLimiter);

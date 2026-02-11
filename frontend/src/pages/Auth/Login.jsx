@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
+import Input from '../../components/ui/Input/Input';
+import Button from '../../components/ui/Button/Button';
 import './auth.css';
 
 /**
@@ -63,50 +65,36 @@ const Login = () => {
           {/* Form */}
           <form onSubmit={handleSubmit} className="auth-form">
             {/* Email Input */}
-            <div className="auth-input-group">
-              <div className="auth-input-wrapper">
-                <Mail className="input-icon h-5 w-5" />
-                <input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="auth-input"
-                  placeholder="you@example.com"
-                  required
-                />
-                <label htmlFor="email" className="floating-label">
-                  Email
-                </label>
-              </div>
-            </div>
+            <Input
+              label="Email"
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              leftIcon={Mail}
+              required
+              fullWidth
+              size="medium"
+              error={error && error.includes('Email') ? error : ''}
+            />
 
             {/* Password Input */}
-            <div className="auth-input-group">
-              <div className="auth-input-wrapper">
-                <Lock className="input-icon h-5 w-5" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="auth-input"
-                  placeholder="password"
-                  required
-                />
-                <label htmlFor="password" className="floating-label">
-                  Password
-                </label>
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="password-toggle-btn"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </button>
-              </div>
-            </div>
+            <Input
+              label="Password"
+              type={showPassword ? 'text' : 'password'}
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="password"
+              leftIcon={Lock}
+              rightIcon={showPassword ? EyeOff : Eye}
+              onRightIconClick={() => setShowPassword(!showPassword)}
+              required
+              fullWidth
+              size="medium"
+              error={error && error.includes('Password') ? error : ''}
+            />
 
             {/* Remember Me & Forgot Password */}
             <div className="form-options">
@@ -128,23 +116,17 @@ const Login = () => {
             </div>
 
             {/* Submit Button */}
-            <button
+            <Button
               type="submit"
+              variant="primary"
+              size="medium"
+              loading={loading}
+              fullWidth
               disabled={loading}
-              className="submit-button"
             >
-              {loading ? (
-                <div className="submit-button-content">
-                  <span className="spinner"></span>
-                  <span>Signing In...</span>
-                </div>
-              ) : (
-                <div className="submit-button-content">
-                  <span>Sign In</span>
-                  <ArrowRight className="h-5 w-5" />
-                </div>
-              )}
-            </button>
+              {loading ? 'Signing In...' : 'Sign In'}
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
           </form>
 
           {/* Footer */}

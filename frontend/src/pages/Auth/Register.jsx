@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, ArrowRight, Eye, EyeOff } from 'lucide-react';
-import authService from '../../services/auth.service';
+import { useAuth } from '../../hooks/useAuth';
+import Input from '../../components/ui/Input/Input';
+import Button from '../../components/ui/Button/Button';
 import './auth.css';
 
 /**
@@ -19,6 +21,7 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { register: authRegister } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,8 +48,8 @@ const Register = () => {
     }
 
     try {
-      const response = await authService.register(name, email, password, confirmPassword);
-      console.log('Registration successful:', response.data);
+      const response = await authRegister(name, email, password, confirmPassword);
+      console.log('Registration successful:', response);
       // Redirect to dashboard
       navigate('/dashboard');
     } catch (err) {
@@ -82,96 +85,68 @@ const Register = () => {
           {/* Form */}
           <form onSubmit={handleSubmit} className="auth-form">
             {/* Full Name Input */}
-            <div className="auth-input-group">
-              <div className="auth-input-wrapper">
-                <User className="input-icon h-5 w-5" />
-                <input
-                  type="text"
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="auth-input"
-                  placeholder="John Doe"
-                  required
-                />
-                <label htmlFor="name" className="floating-label">
-                  Full Name
-                </label>
-              </div>
-            </div>
+            <Input
+              label="Full Name"
+              type="text"
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="John Doe"
+              leftIcon={User}
+              required
+              fullWidth
+              size="medium"
+              error={error && error.includes('Name') ? error : ''}
+            />
 
             {/* Email Input */}
-            <div className="auth-input-group">
-              <div className="auth-input-wrapper">
-                <Mail className="input-icon h-5 w-5" />
-                <input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="auth-input"
-                  placeholder="you@example.com"
-                  required
-                />
-                <label htmlFor="email" className="floating-label">
-                  Email Address
-                </label>
-              </div>
-            </div>
+            <Input
+              label="Email Address"
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              leftIcon={Mail}
+              required
+              fullWidth
+              size="medium"
+              error={error && error.includes('Email') ? error : ''}
+            />
 
             {/* Password Input */}
-            <div className="auth-input-group">
-              <div className="auth-input-wrapper">
-                <Lock className="input-icon h-5 w-5" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="auth-input"
-                  placeholder="password"
-                  required
-                />
-                <label htmlFor="password" className="floating-label">
-                  Password
-                </label>
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="password-toggle-btn"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </button>
-              </div>
-            </div>
+            <Input
+              label="Password"
+              type={showPassword ? 'text' : 'password'}
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="password"
+              leftIcon={Lock}
+              rightIcon={showPassword ? EyeOff : Eye}
+              onRightIconClick={() => setShowPassword(!showPassword)}
+              required
+              fullWidth
+              size="medium"
+              error={error && (error.includes('Password') || error.includes('match')) ? error : ''}
+            />
 
             {/* Confirm Password Input */}
-            <div className="auth-input-group">
-              <div className="auth-input-wrapper">
-                <Lock className="input-icon h-5 w-5" />
-                <input
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  id="confirm-password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="auth-input"
-                  placeholder="password"
-                  required
-                />
-                <label htmlFor="confirm-password" className="floating-label">
-                  Confirm Password
-                </label>
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="password-toggle-btn"
-                  aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
-                >
-                  {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </button>
-              </div>
-            </div>
+            <Input
+              label="Confirm Password"
+              type={showConfirmPassword ? 'text' : 'password'}
+              id="confirm-password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="password"
+              leftIcon={Lock}
+              rightIcon={showConfirmPassword ? EyeOff : Eye}
+              onRightIconClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              required
+              fullWidth
+              size="medium"
+              error={error && error.includes('match') ? error : ''}
+            />
 
             {/* Terms and Conditions */}
             <div className="terms-wrapper">
@@ -196,23 +171,17 @@ const Register = () => {
             </div>
 
             {/* Submit Button */}
-            <button
+            <Button
               type="submit"
-              disabled={loading}
-              className="submit-button"
+              variant="primary"
+              size="medium"
+              loading={loading}
+              fullWidth
+              disabled={loading || !agreeToTerms}
             >
-              {loading ? (
-                <div className="submit-button-content">
-                  <span className="spinner"></span>
-                  <span>Creating Account...</span>
-                </div>
-              ) : (
-                <div className="submit-button-content">
-                  <span>Create Account</span>
-                  <ArrowRight className="h-5 w-5" />
-                </div>
-              )}
-            </button>
+              {loading ? 'Creating Account...' : 'Create Account'}
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
           </form>
 
           {/* Footer */}
