@@ -70,13 +70,13 @@
   opacity: 0;
 }
 
-/* Floating Label Input Group */
-.auth-input-group {
+/* Floating Label Input Group - HIGHER SPECIFICITY */
+.auth-form .auth-input-group {
   position: relative;
   margin-bottom: 1.5rem;
 }
 
-.auth-input-wrapper {
+.auth-form .auth-input-wrapper {
   position: relative;
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -86,13 +86,13 @@
   background-color: hsl(var(--color-background));
 }
 
-.auth-input-wrapper:hover {
+.auth-form .auth-input-wrapper:hover {
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
   transform: translateY(-2px);
 }
 
-/* Floating Label */
-.floating-label {
+/* Floating Label - OVERRIDES .input class */
+.auth-form .floating-label {
   position: absolute;
   left: 2.75rem;
   top: 50%;
@@ -106,9 +106,9 @@
   z-index: 2;
 }
 
-/* Label moves up when input is focused or has value */
-.auth-input:focus ~ .floating-label,
-.auth-input:not(:placeholder-shown) ~ .floating-label {
+/* Label moves up when input is focused or has value - CRITICAL */
+.auth-form .auth-input:focus ~ .floating-label,
+.auth-form .auth-input:not(:placeholder-shown) ~ .floating-label {
   top: 0;
   left: 2.5rem;
   font-size: 0.75rem;
@@ -116,7 +116,8 @@
   font-weight: 600;
 }
 
-.auth-input {
+/* Auth input - OVERRIDES .input class with higher specificity */
+.auth-form .auth-input {
   appearance: none;
   position: relative;
   display: block;
@@ -131,18 +132,19 @@
   transition: all 0.3s ease;
 }
 
-.auth-input::placeholder {
-  color: transparent;
+/* CRITICAL: Hide the placeholder text */
+.auth-form .auth-input::placeholder {
+  color: transparent !important; /* Override .input::placeholder */
 }
 
-.auth-input:focus {
+.auth-form .auth-input:focus {
   outline: none;
   border-color: hsl(var(--color-primary));
   box-shadow: 0 0 0 3px hsl(var(--color-primary) / 0.1);
 }
 
 /* Icon positioning */
-.input-icon {
+.auth-form .input-icon {
   position: absolute;
   left: 0.75rem;
   top: 50%;
@@ -153,12 +155,12 @@
   pointer-events: none;
 }
 
-.auth-input:focus ~ .input-icon {
+.auth-form .auth-input:focus ~ .input-icon {
   color: hsl(var(--color-primary));
 }
 
 /* Password toggle button */
-.password-toggle-btn {
+.auth-form .password-toggle-btn {
   position: absolute;
   right: 0.75rem;
   top: 50%;
@@ -174,7 +176,7 @@
   z-index: 3;
 }
 
-.password-toggle-btn:hover {
+.auth-form .password-toggle-btn:hover {
   color: hsl(var(--color-primary));
 }
 
@@ -293,11 +295,11 @@
     color: hsl(0, 70%, 80%);
   }
   
-  .auth-input-wrapper {
+  .auth-form .auth-input-wrapper {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   }
   
-  .auth-input-wrapper:hover {
+  .auth-form .auth-input-wrapper:hover {
     box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
   }
 }

@@ -81,7 +81,7 @@ const WorkflowSection = () => {
                   </div>
                   
                   {/* Arrow for desktop */}
-                  {index < steps.length - 1 && (
+                  {index < steps.length - 1 && index != 1 && (
                     <div className={styles.arrowIcon}>
                       <ArrowRight className={styles.arrowSvg} />
                     </div>

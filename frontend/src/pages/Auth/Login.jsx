@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
-import Input from '../../components/ui/Input/Input';
-import Button from '../../components/ui/Button/Button';
 import './auth.css';
 
 /**
  * Login Page Component
- * Functional login form with authentication and floating labels
+ * Works with existing .input class while adding floating label functionality
  */
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -64,37 +62,55 @@ const Login = () => {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="auth-form">
-            {/* Email Input */}
-            <Input
-              label="Email"
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              leftIcon={Mail}
-              required
-              fullWidth
-              size="medium"
-              error={error && error.includes('Email') ? error : ''}
-            />
+            {/* Email Input with Floating Label */}
+            <div className="auth-input-group">
+              <div className="auth-input-wrapper">
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder=" "
+                  className="auth-input"
+                  required
+                />
+                <label htmlFor="email" className="floating-label">
+                  Email
+                </label>
+                <Mail className="input-icon h-5 w-5" />
+              </div>
+            </div>
 
-            {/* Password Input */}
-            <Input
-              label="Password"
-              type={showPassword ? 'text' : 'password'}
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="password"
-              leftIcon={Lock}
-              rightIcon={showPassword ? EyeOff : Eye}
-              onRightIconClick={() => setShowPassword(!showPassword)}
-              required
-              fullWidth
-              size="medium"
-              error={error && error.includes('Password') ? error : ''}
-            />
+            {/* Password Input with Floating Label */}
+            <div className="auth-input-group">
+              <div className="auth-input-wrapper">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder=" "
+                  className="auth-input"
+                  required
+                />
+                <label htmlFor="password" className="floating-label">
+                  Password
+                </label>
+                <Lock className="input-icon h-5 w-5" />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="password-toggle-btn"
+                  tabIndex={-1}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
+            </div>
 
             {/* Remember Me & Forgot Password */}
             <div className="form-options">
@@ -116,17 +132,25 @@ const Login = () => {
             </div>
 
             {/* Submit Button */}
-            <Button
+            <button
               type="submit"
-              variant="primary"
-              size="medium"
-              loading={loading}
-              fullWidth
+              className="submit-button"
               disabled={loading}
             >
-              {loading ? 'Signing In...' : 'Sign In'}
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+              <span className="submit-button-content">
+                {loading ? (
+                  <>
+                    <span className="spinner"></span>
+                    Signing In...
+                  </>
+                ) : (
+                  <>
+                    Sign In
+                    <ArrowRight className="h-5 w-5" />
+                  </>
+                )}
+              </span>
+            </button>
           </form>
 
           {/* Footer */}

@@ -9,6 +9,7 @@
   transition: all 0.3s ease;
   background-color: hsla(0, 0%, 100%, 0.8);
   border-bottom: 1px solid hsla(214.3, 31.8%, 91.4%, 0.5);
+  -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
 }
 

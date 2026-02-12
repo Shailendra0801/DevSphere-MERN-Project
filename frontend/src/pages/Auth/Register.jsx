@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
-import Input from '../../components/ui/Input/Input';
-import Button from '../../components/ui/Button/Button';
 import './auth.css';
 
 /**
  * Register Page Component
- * Functional registration form with validation and floating labels
+ * Works with existing .input class while adding floating label functionality
  */
 const Register = () => {
   const [name, setName] = useState('');
@@ -84,69 +82,105 @@ const Register = () => {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="auth-form">
-            {/* Full Name Input */}
-            <Input
-              label="Full Name"
-              type="text"
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="John Doe"
-              leftIcon={User}
-              required
-              fullWidth
-              size="medium"
-              error={error && error.includes('Name') ? error : ''}
-            />
+            {/* Full Name Input with Floating Label */}
+            <div className="auth-input-group">
+              <div className="auth-input-wrapper">
+                <input
+                  type="text"
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder=" "
+                  className="auth-input"
+                  required
+                />
+                <label htmlFor="name" className="floating-label">
+                  Full Name
+                </label>
+                <User className="input-icon h-5 w-5" />
+              </div>
+            </div>
 
-            {/* Email Input */}
-            <Input
-              label="Email Address"
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              leftIcon={Mail}
-              required
-              fullWidth
-              size="medium"
-              error={error && error.includes('Email') ? error : ''}
-            />
+            {/* Email Input with Floating Label */}
+            <div className="auth-input-group">
+              <div className="auth-input-wrapper">
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder=" "
+                  className="auth-input"
+                  required
+                />
+                <label htmlFor="email" className="floating-label">
+                  Email Address
+                </label>
+                <Mail className="input-icon h-5 w-5" />
+              </div>
+            </div>
 
-            {/* Password Input */}
-            <Input
-              label="Password"
-              type={showPassword ? 'text' : 'password'}
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="password"
-              leftIcon={Lock}
-              rightIcon={showPassword ? EyeOff : Eye}
-              onRightIconClick={() => setShowPassword(!showPassword)}
-              required
-              fullWidth
-              size="medium"
-              error={error && (error.includes('Password') || error.includes('match')) ? error : ''}
-            />
+            {/* Password Input with Floating Label */}
+            <div className="auth-input-group">
+              <div className="auth-input-wrapper">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder=" "
+                  className="auth-input"
+                  required
+                />
+                <label htmlFor="password" className="floating-label">
+                  Password
+                </label>
+                <Lock className="input-icon h-5 w-5" />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="password-toggle-btn"
+                  tabIndex={-1}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
+            </div>
 
-            {/* Confirm Password Input */}
-            <Input
-              label="Confirm Password"
-              type={showConfirmPassword ? 'text' : 'password'}
-              id="confirm-password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="password"
-              leftIcon={Lock}
-              rightIcon={showConfirmPassword ? EyeOff : Eye}
-              onRightIconClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              required
-              fullWidth
-              size="medium"
-              error={error && error.includes('match') ? error : ''}
-            />
+            {/* Confirm Password Input with Floating Label */}
+            <div className="auth-input-group">
+              <div className="auth-input-wrapper">
+                <input
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  id="confirm-password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder=" "
+                  className="auth-input"
+                  required
+                />
+                <label htmlFor="confirm-password" className="floating-label">
+                  Confirm Password
+                </label>
+                <Lock className="input-icon h-5 w-5" />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="password-toggle-btn"
+                  tabIndex={-1}
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
+            </div>
 
             {/* Terms and Conditions */}
             <div className="terms-wrapper">
@@ -171,17 +205,25 @@ const Register = () => {
             </div>
 
             {/* Submit Button */}
-            <Button
+            <button
               type="submit"
-              variant="primary"
-              size="medium"
-              loading={loading}
-              fullWidth
+              className="submit-button"
               disabled={loading || !agreeToTerms}
             >
-              {loading ? 'Creating Account...' : 'Create Account'}
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+              <span className="submit-button-content">
+                {loading ? (
+                  <>
+                    <span className="spinner"></span>
+                    Creating Account...
+                  </>
+                ) : (
+                  <>
+                    Create Account
+                    <ArrowRight className="h-5 w-5" />
+                  </>
+                )}
+              </span>
+            </button>
           </form>
 
           {/* Footer */}
